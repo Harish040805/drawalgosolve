@@ -1,0 +1,8 @@
+{
+    "indices": {
+        "spanning_trees": 10,
+        "johnson": 0,
+        "dinic": 2,
+        "mathematicians": 6
+    }
+}

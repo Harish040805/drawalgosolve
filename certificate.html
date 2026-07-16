@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DAS: Certificate of Completion</title>
+<link rel="shortcut icon" href="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" type="image/x-icon">
+<style>
+body { background: #f7f7f7; font-family: 'Georgia', serif; display: flex; flex-direction: column; align-items: center; padding: 10px 10px 60px;
+min-height: 100vh; }
+.name-form { background: white; padding: 25px 30px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); width: 1200px; display: flex; align-items: center;
+    gap: 10px; margin-bottom: 20px; }
+.name-label { font-size: 16px; font-weight: 600; white-space: nowrap; }
+.name-input { flex-grow: 2; padding: 8px 10px; font-size: 16px; border: 2px solid #ffd700; border-radius: 6px; outline-offset: 2px; transition: border-color 0.3s; }
+.generate-btn, .download-btn { padding: 8px 12px; font-weight: 700; font-size: 14px; color: white; background-color: #ffd700; border: none; border-radius: 6px;
+    cursor: pointer; transition: background-color 0.3s; flex-grow: 0; width: auto; }
+.generate-btn:hover, .download-btn:hover { background-color: #e6c200; }
+.outer-border { background-color: white; padding: 20px; box-sizing: border-box; }
+.inner-border { border: 8px solid #007BFF; background-color: white; width: 1123px; height: 880px; padding: 20px; box-sizing: border-box; text-align: center;
+    position: relative; display: flex; justify-content: center; align-items: center; }
+.innerm-border { border: 6px solid #007BFF; background-color: white; width: 1200px; height: 840px; padding: 20px; box-sizing: border-box; text-align: center;
+    position: relative; }
+.bootcamp-title { color: #032B44; font-size: 34px; margin-bottom: 10px; }
+.bootcamp-subtitle { color: #032B44; font-size: 18px; margin-bottom: 0px; }
+.certificate-title { color: #032B44; font-size: 39px; margin: 20px 0; }
+.course-title { font-size: 29px; font-weight: bold; color: #000; margin-bottom: 30px; }
+.awarded { font-size: 26px; margin-top: 20px; font-weight: bold; }
+.name-display { font-size: 30px; font-weight: bold; margin: 10px 0; }
+.description { font-size: 23px; margin: 10px auto; max-width: 750px; }
+.logo-container { display: flex; align-items: center; gap: 12px; }
+.logodo { height: 40px; width: auto; border-radius: 50%; border: 2px solid #007BFF; }
+.logo-text { margin: 0; font-size: 24px; }
+.logo { width: 120px; height: 120px; object-fit: contain; border-radius: 50%; border: 2px solid #007BFF; margin: 0 auto 10px; }
+.signatures { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 10px; margin-bottom: 100px; font-size: 18px; color: #555; 
+    padding: 0 60px; }
+.logo2 { width: 40px; height: 40px; object-fit: contain; border-radius: 50%; border: 2px solid #007BFF; margin: 0 auto 10px; }
+.frojio{ display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="logo-container">
+    <img src="https://avatars.githubusercontent.com/u/188087585?v=4" class="logodo">
+    <h2>Harish Creations</h2>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" alt="DAS Logo" class="logodo">
+    <h1 class="logo-text">DAS: DrawalgoSolve</h1>
+  </div>
+<form id="nameForm" class="name-form" autocomplete="off">
+  <label for="nameInput" class="name-label">Enter your name to generate certificate:</label>
+  <input type="text" id="nameInput" class="name-input" placeholder="Your full name" required />
+  <button type="submit" class="generate-btn">Generate Certificate</button>
+  <button type="button" class="download-btn" id="downloadBtn">Download Certificate</button>
+</form>
+<div class="outer-border" role="region" aria-label="Certificate" id="certificateArea">
+  <div class="inner-border">
+    <div class="innerm-border">
+      <div class="bootcamp-title" style="margin-top: 20px;">
+        <img src="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" alt="DAS Logo" class="logo" style="margin: 0;">
+        <br>
+        <span>
+          DAS: DrawalgoSolve<br>
+          <span class="bootcamp-subtitle">🤖 AI Powered Graphs & Algorithms Simulation & 🔵<br> Practice Platform with Visualization & Problem Solving</span>
+        </span>
+      </div>
+      <br>
+      <div class="certificate-title">🏅 Certificate of Completion 🏅</div>
+      <div class="awarded">This is to certify that</div>
+      <div class="name-display" id="username" name="username" value="{{ profile.username }}"></div>
+      <div class="description">
+        has successfully completed
+        <div class="course-title" style="font-size: 28px; font-weight: bold; margin: 10px 0;">{} Modules in the {total/topic + topic_name}</div>
+        on
+        <div class="date-display" id="dateDisplay" style="font-weight: bold; margin: 10px 0;"></div>
+        <br>
+        <span class="container">
+    <b>ID: </b><span id="unique-member-id"></span>
+</span>
+
+<script>
+function generateStaticID() {
+    const element = document.getElementById("unique-member-id");
+    const now = new Date();
+
+    // 1. Extract and pad date/time parts to enforce 2 digits
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = String(now.getFullYear()).slice(-2);          // Gets last 2 digits of year
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    // 2. Generate the random string (Currently set to 35 characters)
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let randomLetters = "";
+    for (let i = 0; i < 35; i++) {
+        randomLetters += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    // 3. Combine into a single string under the DAS prefix
+    element.textContent = `DAS${day}${month}${year}${hours}${minutes}${seconds}${randomLetters}`;
+}
+
+// Generate the ID once when the script loads
+generateStaticID();
+</script>
+
+<script>
+const nameEl = document.getElementById("username");
+const nameTextEl = document.getElementById("name-text");
+const form = document.getElementById("nameForm");
+const input = document.getElementById("nameInput");
+const downloadBtn = document.getElementById("downloadBtn");
+const certificateArea = document.getElementById("certificateArea");
+
+function loadName() {
+  const request = indexedDB.open("DrawalgoSolveDB", 2);
+  request.onsuccess = (event) => {
+    const db = event.target.result;
+    if (db.objectStoreNames.contains("userProfile")) {
+      const store = db.transaction(["userProfile"], "readonly").objectStore("userProfile");
+      const getReq = store.get("username");
+      getReq.onsuccess = () => {
+        if (getReq.result && getReq.result.value) {
+          updateCertificate(getReq.result.value);
+          input.value = getReq.result.value;
+        }
+      };
+    }
+  };
+  setLiveDate();
+}
+function updateCertificate(username) {
+  nameEl.textContent = username;
+}
+function setLiveDate() {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = months[today.getMonth()];
+  const year = today.getFullYear();
+  document.getElementById("dateDisplay").textContent = `${day}-${month}-${year}`;
+}
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const enteredName = input.value.trim();
+  if (!enteredName) {
+    alert("Please enter your name.");
+    return;
+  }
+  updateCertificate(enteredName);
+  localStorage.setItem("certificateName", enteredName);
+});
+downloadBtn.addEventListener("click", () => {
+  html2canvas(certificateArea).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "Dynamitecertificate.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+});
+loadName();
+</script>
+</body>
+</html>

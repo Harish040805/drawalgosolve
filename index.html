@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started | DAS: DrawalgoSolve</title>
+    <link rel="shortcut icon" href="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" type="image/x-icon">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { height: 100%; font-family: Arial, sans-serif; background-color: #9ecaff; display: flex; justify-content: center; align-items: center; user-select: none; }
+        .welcome-card { background-color: #fff; text-align: center; padding: 40px; border: 2px solid #162cec; border-radius: 20px; box-shadow: 0 10px 25px rgba(22, 44, 236, 0.1);
+            max-width: 510px; z-index: 5; }
+        h1 { color: #1e0f8e; margin-bottom: 20px; font-size: 32px; animation: fadeIn 3s forwards; }
+        p { color: #4f66f7; margin-bottom: 30px; line-height: 1.6; opacity: 0; animation: fadeIn 3s forwards; animation-delay: 2s; }
+        .btn-start { background-color: #2915c0; color: white; padding: 15px 40px; border: 3px solid #1e0f8e; border-radius: 10px; font-size: 18px; cursor: pointer;
+            text-decoration: none; }
+        .btn-start:hover { border-color: #160a6f; }
+        .indexlogo { width: 180px; height: 180px; margin-bottom: 10px; display: block; margin: 0 auto; border-radius: 50%; }
+        .sidebar-container { position: fixed; top: 0; left: 0; height: 100vh; width: 25%; min-width: 20px; z-index: 3; }
+        .sidebar-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;  opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .sidebar-image.active { opacity: 1; z-index: 4; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar-container">
+        <img src="https://github.com/Harish040805/drawalgosolve/blob/main/eqi.gif?raw=true" alt="Demo Image" class="sidebar-image img-1">
+        <img src="https://github.com/Harish040805/drawalgosolve/blob/main/eqii.gif?raw=true" alt="Demo Image 2" class="sidebar-image img-2">
+    </div>
+    <div class="welcome-card">
+        <img src="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" class="indexlogo">
+        <br><br>
+        <h1>✍️ DAS: DrawalgoSolve 🎨</h1>
+        <p>🤖 AI Powered Graphs & Algorithms Simulation & 🔵 Practice Platform with Visualization & Problem Solving</p>
+        <a href="/signin" class="btn-start">Get Started &nbsp; ▶️</a>
+    </div>
+    <script>
+        const img1 = document.querySelector('.img-1');
+        const img2 = document.querySelector('.img-2');
+        function showImage1() {
+            img2.classList.remove('active');
+            img1.classList.add('active');
+            setTimeout(showImage2, 1400);
+        }
+        function showImage2() {
+            img1.classList.remove('active');
+            img2.classList.add('active');
+            setTimeout(showImage1, 1370);
+        }
+        showImage1();
+    </script>
+</body>
+</html>

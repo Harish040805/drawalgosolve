@@ -1,0 +1,14 @@
+Remove content from questions.txt file and add the questions from your old DS and DAA and TOC question papers 2yr and 3yr as it is. But, add topic wise.
+
+Example:
+
+### B-Tree
+content
+
+### Automata Theory - I
+content
+
+### Trees
+content
+
+Replace the question as it is in the place written as "content" above. Add for all topics.

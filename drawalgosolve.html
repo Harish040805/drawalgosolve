@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main | DAS: DrawalgoSolve</title>
+    <link rel="shortcut icon" href="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" type="image/x-icon">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { height: 100%; font-family: Arial, sans-serif; background-color: #fff; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; user-select: none; }
+        .scrollable-hidden-bar::-webkit-scrollbar { display: none; }
+        .app-container { display: flex; height: 100vh; width: 100vw; }
+        .l-side-panel { width: 300px; min-width: 280px; height: 100%; background-color: #004aad; border: 1px solid #ddd; padding: 20px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; }
+        .r-side-panel { width: 300px; min-width: 340px; height: 100%; background-color: #f7f7f7; border: 1px solid #ddd; padding: 0; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; }
+        .r-panel-content { padding: 0 15px 15px 15px; }
+        .center-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; background-color: #e0e7ff; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; }
+        h1 { font-size: 28px; text-align: center; margin-bottom: 15px; color: #1e0f8e; }
+        #canvas { border: 2px solid #162cec; border-radius: 10px; background-color: #fff; cursor: grab; flex-shrink: 0; }
+        #canvas:active { cursor: grabbing; }
+        .button-container { margin-top: 5px; background-color: #106adf; border: 1px solid #ddd; padding: 12px 20px; border-radius: 10px; display: flex; flex-direction: row; gap: 8px; justify-content: space-between; width: 100%; }
+        .button-container button { font-size: 14px; flex: 1; padding: 8px 4px; }
+        .button-container button:hover::before { display: inline-block; padding-left: 100%; animation: marquee 5s linear infinite; }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        } 
+        button { color: #fff; background-color: #2915c0; border: 2px solid #1e0f8e; padding: 8px 15px; font-size: 10px; border-radius: 8px; cursor: pointer; width: 100%; height: 45px; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: clip; }
+        button:hover { border: 2px solid #000836; }
+        .btn { color: #fff; background-color: #2915c0; border: 2px solid #1e0f8e; padding: 8px 15px; font-size: 10px; border-radius: 8px; cursor: pointer; }
+        .btn:hover { border: 2px solid #000836; }
+        #solution-container { margin-top: 8px; padding: 15px; background-color: #fff; border: 1px solid #c6c6c6; border-radius: 8px; width: 98%; max-width: 1000px; box-sizing: border-box; max-height: 100px; overflow-y: auto; overflow-x: hidden; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; white-space: normal; line-height: 1.6; font-size: 14px; }
+        .about-iframe-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.950); display: none; z-index: 2000; }
+        .about-close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #fff; background-color: #ff0000; border-radius: 50%; width: 40px; height: 40px; text-align: center; line-height: 40px; border: 2px solid #fff; }
+        .weight-input-field { width: 100%; height: 35px; padding: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .indexlogo { width: 160px; height: 160px; margin-bottom: 10px; display: block; margin: 0 auto; border-radius: 50%; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #004aad; width: 100%; padding: 15px 50px; color: #fff; font-family: sans-serif; margin-bottom: 0px; position: sticky; top: 0; z-index: 1000; }
+        .nav-links { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
+        .nav-links li a { color: #fff; text-decoration: none; font-weight: bold; white-space: nowrap; font-size: 16px; }
+        .logo { display: flex; align-items: center; font-size: 22px; font-weight: bold; white-space: nowrap; gap: 10px; animation: fadeIn 3s forwards; }
+        .logo img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .hrc { border: 2px solid #002ccb; }
+        .mode-toggle-container { padding: 0 !important; margin: 0 !important; }
+        .mode-toggle-wrapper { display: flex; width: 100%; background-color: #e0e7ff; border-radius: 0; overflow: hidden; border: none; border-bottom: 1px solid #162cec; margin-bottom: 20px; }
+        .mode-segment { flex: 1; padding: 10px 5px; text-align: center; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; color: #1e0f8e; white-space: nowrap; }
+        .mode-segment.active { background-color: #1e0f8e; color: #ffffff; }
+        #current-mode-text { display: none; }
+        .button-row-container { display: flex; justify-content: center; gap: 10px; width: 100%; padding: 10px 0; }
+        #refresh-btn { flex: 1; max-width: 200px; margin: 0; text-align: center; font-size: 14px; }
+        #refresh-question { animation: fadeIn 3s forwards; opacity: 0; animation-delay: 7s; }
+        #matrix-display { max-height: 300px; overflow: auto; border-top: 1px solid #eee; padding-top: 10px; }
+        .matrix-solver-row { display: flex; justify-content: center; align-items: center; gap: 5px; margin-bottom: 15px; }
+        #row-input, #col-input { width: 40px !important; height: 35px !important; padding: 5px; border: 2px solid #1e0f8e; border-radius: 6px; text-align: center; }
+        .set-reset-mat { height: 35px; padding: 0 13px; background: #2915c0; color: #fff; border: 2px solid #1e0f8e; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; display: flex; align-items: center; }
+        .set-reset-mat:hover { border: 2px solid #000836; }
+        .matrix-input-style { width: 50px; padding: 8px; border: 2px solid #1e0f8e; border-radius: 8px; text-align: center; }
+        #user-justification { width: 100%; max-width: 360px; height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; resize: vertical; font-family: Arial; }
+        .welc-conto { color: #2a2a2a; font-weight: bold; margin-bottom: 10px; background-color: #e0e7ff; border: 2px solid #1e0f8e; border-radius: 10px; padding: 10px; font-size: 13px; }
+        .uic { display: none; margin-bottom: 15px; width: 100%; max-width: 867px; align-items: center; gap: 10px; }
+        .uic.visible { display: flex; }
+        .uic input { flex: 1; }
+        .uic button { width: auto; white-space: nowrap; }
+        .draw { width: 79%; padding: 10px; border-radius: 5px; border: 2px solid #1e0f8e; }
+        .graph-topic-blue-class { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; }
+        .wpbbr { width: 45px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
+        .cb { text-align: center; color: #fff; }
+        .wto { text-align: center; color: #fff; }
+        .seltop { font-weight: bold; display: block; margin-bottom: 8px; color: #fff; }
+        #matrixOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 3000; display: none; justify-content: center; align-items: center; }
+        .overlay-content { background: white; padding: 30px; width: 90%; max-width: 800px; max-height: 85vh; overflow-y: auto; border-radius: 12px; border: 3px solid #1e0f8e; position: relative; }
+        .matrix-item-container { background: #f0f4ff; margin-bottom: 20px; padding: 15px; border: 1px solid #162cec; border-radius: 8px; position: relative; }
+        .matrix-grid { display: grid; gap: 5px; margin-top: 10px; }
+        .delete-matrix-btn { background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; float: right; }
+        .delete-matrix-btn:hover { background-color: #cc0000; border: none; }
+        #close-matrix-btn { position: absolute; top: 10px; right: 10px; background: #ff0000; border-radius: 50%; width: 30px; height: 30px; line-height: 25px; padding: 0; }
+        .bluehr { margin: 10px 0; border: 0.5px solid #fff; }
+        #solve-btn { background-color: #00d400; color: #ebebeb; border: 2px solid #008d00; font-size: 17px; opacity: 0; animation: fadeIn 3s forwards; animation-delay: 5s; }
+        #solve-btn:hover { background-color: #00e700; color: #fff; border: 2px solid #ffe100; }
+        #solve-btn:disabled { background-color: #a0a0a0; border: 2px solid #808080; color: #eee; cursor: not-allowed; opacity: 0;  animation: fadeIn 3s forwards; animation-delay: 5s; }
+        #solve-btn:disabled:hover { background-color: #a0a0a0; border: 2px solid #808080; }
+        .clock-container { background-color: #1e293b; border: none; margin: 0px 0px 0px 0px; padding: 1rem 1rem 1rem 1rem; text-align: center; }
+        #live-time { font-size: 18px; font-weight: 700; color: #fff; animation: fadeIn 3s forwards; opacity: 0; animation-delay: 3s; }
+        #live-date { font-size: 18px; color: #fff; font-weight: 500; animation: fadeIn 3s forwards; opacity: 0; animation-delay: 3s; margin-bottom: 10px; }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .timer-container { background-color: #ffffff; padding: 5px 5px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center; margin-top: 18px; }
+        .timer-display { font-size: 18px; font-weight: bold; color: #1a1a1a; letter-spacing: 2px; }
+        .timer-label { font-size: 12px; color: #666666; text-transform: uppercase; margin: 4px; letter-spacing: 1px; }
+        #zoom-in-btn, #zoom-out-btn { width: 45px; height: 45px; background-color: #e3e3e3; padding: 1px; border: 2px solid #c6c6c6; }
+        #zoom-in-btn:hover, #zoom-out-btn:hover { background-color: #e3e3e3; padding: 1px; border: 2px solid #939393; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+  <span class="logo"><img src="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" onclick="window.location.href='/'">&nbsp; DAS: DrawalgoSolve</span>
+<ul class="nav-links">
+  <li><a href="/">🏠 Home</a></li>
+  <li id="about" style="cursor: pointer;"><a>📑 About</a></li>
+  <li><a href="/signin">✍️ Sign in</a></li>
+  <li><a href="/signup">✍️ Sign up</a></li> 
+  <li><a href="/profile">👤 Profile</a></li>
+  <li><a href="/">↪️ Log out</a></li> 
+</ul>
+</nav>
+    <div class="about-iframe-overlay" id="about-iframe-overlay">
+        <span class="about-close-btn" id="about-close-btn">&times;</span>
+        <iframe srcdoc="
+        <html>
+        <head>
+            <style>
+                html { border: 5px solid #162cec; border-radius: 20px; margin: 15px; scrollbar-width: none; -ms-overflow-style: none; }
+                html::-webkit-scrollbar { display: none; }
+                body{ font-family:Arial; padding:20px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; }
+                body::-webkit-scrollbar { display: none; }
+                .scrollable-hidden-bar::-webkit-scrollbar { display: none; }
+                img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+                b { color: #162cec; }
+                .imp { color:#ff0000; text-align: center; display: block; }
+                .sm { color:#000; }
+                h3 { color:#162cec; text-align: center; }
+            </style>
+        </head>
+            <body>
+                <img src='https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true'>
+                <h3>DAS: DrawalgoSolve - 🤖 AI Powered Graphs & Algorithms Simulation & Practice Platform with Visualization & Problem Solving 🔵</h3>
+                <hr>
+                    <p>⭐ Visualize and interact with graph structures. Create vertices, connect them with edges, and assign weights to build your logic.</p>
+                    <p><b>❓ How to use this site:</b></p>
+                    <p>
+                        ✳️<b>Navbar:</b> The Navbar contains the redirection buttons to navigate to the 🏠 Home, 📑 About, ✍️ Sign in, ✍️ Sign up and 👤 Profile pages. It also contains a ↪️ Log out button on clicking which the users can log out the web app.<br>
+                        ✳️<b>Modes in the Site:</b> Toggle between the environments using the mode selection panel. In 🏆 Challenge Mode, AI generates a question on the specific topic which you need to solve using the graph toolkit (Vertex, Edge, Weight, etc.) and validation areas. In ☑️ Solve Mode, you can input your own custom graph query in the input field on the middle top of the screen and generate solution using 🪄 Generate Graph button that the AI will automatically draw the corresponding graph layout solution on the canvas. But, frequent toggling between these modes is restricted. Also, switching from ☑️ Solve Mode back to 🏆 Challenge Mode automatically resets and generates a completely new question at once. This is to prevent copying the AI's generated solution to solve the current challenge.<br>
+                        ✳️<b>Select Topic:</b> Click the drop-down menu to select the specific topic or problem type you want to work on to solve the problem. The container below the Select Topic dropdown displays a short information about what the particular topic or algorithm is about for the users to understand how to solve the problem.<br>
+                        ✳️<b>Live Date and Time:</b> Present on the top right corner of the page shows the current time in hh:mm:ss AM/PM format and day and date in Day, Month XX, 20XX format.<br>
+                        ✳️<b>Question❓:</b> Here the AI generates the question for the user to solve on.<br>
+                        ✳️<b>🔵 Vertex and ➖ Edge:</b> Click the '🔵 Vertex' button to create a new vertex. When prompted, enter a label to name the vertex in the prompt and click OK. To use edges, first create minimum two vertices. Then, click '➖ Edge' button once to enable mode, click two vertices to connect them, then click 'Edge' again to disable.<br>
+                        ✳️<b>⚖️ Weight:</b> For weighted graph analysis, complete the diagram before clicking Weight button. Then, click '⚖️ Weight' and enter values in the input fields provided. Weight mode supports the following inputs.<br>
+                        <br>
+                        &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; ...-1,0,1..., 0.5, a,b,c..., 'inf', 0/0,0/1,1/0,1/1,X/0... w1,w2,w3... &lt;,&gt;,&lt;=,&gt;=,==,!=, ε
+                        <br><br>
+                        ✳️<b>↔️ Digraph:</b> For Digraphs (Directed Graphs), ensure there is atleast two vertices connected with atleast one edge in the graph. Click the '↔️ Digraph' button anytime to make the entire graph directed. Edge mode is independent of this function. If there is atleast one edge formed, you can click this button to make your graph a digraph anytime. To determine the proper direction, first click on the source vertex and then the destination vertex. Use Undo and Redo buttons to determine the source and the destination vertices properly.
+                        <br>
+                        ✳️<b>♾️ Self-Loop:</b> To add a self loop, first click once on the vertex that needs to have the self loop. Then click on the '♾️ Self-Loop' button to create self loop for that particular vertex.<br>
+                        ✳️<b>➡️ Initial State, ⭕ Final State:</b> Applicable and can be enabled only for the Automata Theory I, II and DAG Problems and are similar to 🔵 Vertex button.<br>
+                        ✳️<b>🕸️ Group:</b> Useful to group two or more vertices/keys into a single disk block structure, typically used to represent index nodes in advanced data structures like B Trees or B+ Trees. When designing these structures, the 🕸️ Group feature can represent grouped keys inside a unified block, interleaving them cleanly with multiple child pointers according to the logic of the target problem context.<br>
+                        ✳️<b>🔓 Ungroup:</b> Removes the partcular group formed between two or more vertices/keys.<br>
+                        ✳️<b>↩️ Undo,↪️ Redo,🔄️ Reset:</b> Click '↩️ Undo' or '↪️ Redo' button once to undo or redo the graph to one previous state. Click '🔄️ Reset' button to clear the entire graph.<br>
+                        ✳️<b>Selecting a Particular Vertex:</b> Just left click on a particular vertex once that needs to be selected and implement functions.<br>
+                        ✳️<b>🗑️ Delete:</b> Select a vertex, then click the '🗑️ Delete' button.<br>
+                        ✳️<b>Zoom ➕ and ➖:</b> Click on the 'Zoom ➕' button for gradual zoom in and 'Zoom ➖' button for gradual zoom out.<br>
+                        ✳️<b>📟 Open Matrix Solver:</b> Click the '📟 Open Matrix Solver' button to open the overlay. Input the required dimensions in 'Rows' and 'Cols' and click 'Add New Matrix' to generate the grid. Fill the cells with numbers, letters, or symbols as needed. For labeled grids (e.g., adjacency matrices), increase the dimensions by 1 (e.g., create a 6 x 6 matrix for a 5 x 5 grid) to use the first row and column for headers; otherwise, create the exact size needed. This flexible tool can be adapted to suit any specific problem context.<br>
+                        ✳️<b>🗺️ Vertex Explorer:</b> Here the names of all the vertices created on the graph by the users are displayed. It is where the names of the vertices can be changed dynamically.<br>
+                        ✳️<b>⚖️ Edge Weights:</b> Here the weights of the edges are displayed. To enable edge weights, click on 'Weights' button. Here, the weights of the edges can be changed dynamically.<br>
+                        ✳️<b>🔨 Resizable User Justification & Doubt Clarification Area 📜:</b> This mandatory, autosaving textarea is available only in 🏆 Challenge Mode and evaluated by AI. It is used to justify the user drawn graph. It serves three roles, 1. To give Justification for the user drawn graph. 2. To ask doubts to AI acting like an input field to chat with AI. 3. To use as a text based graph construction for problems that need some specific features that are not in this site. That is, if a problem needs a stack interface to solve it before expressing it in a graph, this web app does not support stack. So, that can be compromised my using the User Justification Area.<br>
+                        ✳️<b>☑️ SOLVE Button:</b> To be clicked in the last after the graph is drawn and the justification is given. This triggers the AI to evaluate the graph drawn by the user and tell if it is correct or not. It is present in both the modes. But, advised to use only in 🏆 Challenge Mode.<br>
+                        ✳️<b>AI Solution:</b> All the solution given by AI will appear in the container having the text Solution output will appear here... It serves as a solution container for the 🔨 Resizable User Justification & Doubt Clarification Area 📜. It is present in both 🏆 Challenge Mode and ☑️ Solve Mode. In 🏆 Challenge Mode, it is where the AI displays its comments on the user drawn graph, that is it says whether the user's graph is drawn CORRECTLY or INCORRECTLY or PARTIALLY CORRECTLY. In☑️ Solve Mode, it the container where the AI gives its justification for the graph it draw. It serves three roles, 1. The AI gives its justification and solution for the graph drawn by it here. 2. The AI tells the users whether the graph drawn by them is correct or not here. 3. The AI generated solution for the graph drawn is displayed here.<br>
+                        ✳️<b>🗽 NEW 🏆 CHALLENGE/🌟 Next Question Button:</b> Makes the AI generate a new question. For user given incorrect solution, unable to solve by the user, the user can either know the solution toggling to the ☑️ Solve Mode or just skip the question clicking on this button. If the user given solution is incorrect, it stays on the same page until the user gives a correct solution otherwise click on the 🗽 NEW 🏆 CHALLENGE button to skip it. On skipping a particular question, the profile page will not get updated in the total number of problems solved by the users, but moves to the next question. If the user given solution is correct, then the 🗽 NEW 🏆 CHALLENGE button automatically turns into 🗽 NEW 🏆 CHALLENGE button, that the users can move to the next question and the profile page gets updated by 1. The same button serves both the functionalities in a slightly different way. The difference lies in profile page updation.<br>
+                        ✳️<b>↔️ Colour Picker [_]:</b> For specific problems like graph colouring that needs two or more colours to be used, the user is advised to use the Colour Picker to create vertices of different colours based on the problem nature. First the user needs to select a particular vertex whose colour needs to be changed. Then click on the colour pane in the bottom right corner usually in a blue colour for an unused page. Drag to the desired colour you need. Here the changes are not shown immediately. Once you choose the desired colour, click outside the colour panel anywhere (recommended to click on the canvas somewhere) to see the changes in the vertex colour. A vertex that is been selected is diaplyed always in blue colour. Do not confuse with it and the colour choosen.<br> 
+                    </p>
+                <br>
+                <b class='imp'>‼️🚨 *** IMPORTANT *** ⚠️‼️</b>
+                <hr>
+                    <p>👉 <b class='sm'>IN SOLVE MODE</b>, Expand the vertices of the graph to certain distance to get a clear view of the graph generated by the AI</p>
+                    <br><br>
+            </body>
+        </html>" 
+            frameborder="0" width="100%" height="100%"></iframe>
+    </div>
+    <div class="app-container">
+        <aside class="l-side-panel">
+            <label for="graph-topic" class="seltop">🔽 Select Topic you like to Solve:</label>
+            <select id="graph-topic" class="graph-topic-blue-class">
+                <option value="Spanning-Tree">Spanning Trees</option>
+                <option value="Binary-Tree">Binary Tree</option>
+                <option value="Binary-Search-Tree">Binary Search Tree</option>
+                <option value="B-Tree">B Tree</option>
+                <option value="B-Plus-Tree">B+ Tree</option>
+                <option value="AVL-Tree">AVL Tree</option>
+                <option value="Red-Black-Tree">Red-Black Tree</option>
+                <option value="Segment-Tree">Segment Tree</option>
+                <option value="Heap-Tree">Heap Tree</option>
+                <option value="Prim's-Algorithm">Prim's Algorithm</option>
+                <option value="Kruskal's-Algorithm">Kruskal's Algorithm</option>
+                <option value="Dijkstra's-Algorithm">Dijkstra's Algorithm</option>
+                <option value="Floyd-Warshall-Algorithm">Floyd-Warshall Algorithm</option>
+                <option value="Bellman-Ford-Algorithm">Bellman-Ford Algorithm</option>
+                <option value="Kahn's-Algorithm">Kahn's Algorithm</option>
+                <option value="Johnson's-Algorithm">Johnson's Algorithm</option>
+                <option value="Boruvka's-Algorithm">Boruvka's Algorithm</option>
+                <option value="Ford-Fulkerson's-Algorithm">Ford Fulkerson's Algorithm</option>
+                <option value="Dinic's-Algorithm">Dinic's Algorithm</option>
+                <option value="Karger's-Algorithm">Karger's Algorithm</option>
+                <option value="Peterson's-Algorithm">Peterson's-Algorithm</option>
+                <option value="TSP">TSP (Travelling Salesman Problem)</option>
+                <option value="Graph-Vertex-Edges-different-types">Graphs: Vertex/Edges, different types</option>
+                <option value="Euler-Path-and-Circuit">Euler Path & Circuit</option>
+                <option value="Hamiltonian-Path-and-Circuit">Hamiltonian Path & Circuit</option>
+                <option value="Lattice-Partially-Ordered-Set">Lattice (Partially Ordered Set)</option>
+                <option value="Cycle-Detection">Cycle Detection</option>
+                <option value="Directed-and-Undirected-Graphs">Directed and Undirected Graphs</option>
+                <option value="Digital-Principles-State-Diagrams">Digital Principles State Diagrams</option>
+                <option value="Automata-Theory-I-NFA-DFA-construction-using-Regular-Expression">Automata Theory - I (NFA/DFA construction using Regular Expression)</option>
+                <option value="Automata-Theory-II-DFA-to-NFA-NFA-to-DFA-Conversion">Automata Theory - II (DFA to NFA/NFA to DFA Conversion)</option>
+                <option value="DAG">DAG (Directed Acyclic Graphs)</option>
+                <option value="Graphs-in-AI-Concepts">Graphs in AI Concepts</option>
+                <option value="Graphs-in-ML-and-DL-Concepts">Graphs in ML and DL Concepts</option>
+                <option value="Bayesian-Networks">Bayesian Networks</option>
+                <option value="Neural-Networks">Neural Networks</option>
+                <option value="Graph-Colouring">Graph Colouring</option>
+                <option value="Local-and-Global-Maxima-Minima">Local and Global Maxima Minima</option>
+            </select>
+            <br><br>
+                <div id="algo-description-section" style="margin-bottom: 20px;">
+                    <div id="algo-description-text" class="welc-conto"></div>
+                </div>
+                <h3 class="cb">Question❓</h3>
+                <hr class="bluehr">
+                <div id="welcome-container" class="welc-conto"></div>
+            <br>
+            <div class="accordion-item">
+                <h3 class="cb accordion" style="background: none; border: none; padding: 0; margin: 0; text-align: center; width: 100%; cursor: pointer;">🗺️ Vertex Explorer ▾</span></h3>
+                <hr class="bluehr">
+                <div class="panel" style="display: none;">
+                    <div id="vertex-display-list"><p style="font-size: 13px; color: #ddd;">Names of Vertices Present on the Canvas Appears Here</p></div>
+                    <br>
+                </div>
+            </div>
+            <br>
+            <div class="accordion-item">
+                <div class="accordion" style="background: none; border: none; padding: 0; margin: 0; text-align: center; width: 100%; cursor: pointer;">
+                    <h3 class="cb" style="margin: 0; display: inline-block;">⚖️ Edge Weights ▾&nbsp;<span title="Enable 'Weight' button to edit edges">ℹ️</span></h3>
+                    <h6 class="wto" style="margin: 0;"></h6>
+                </div>
+                <hr class="bluehr">
+                <div class="panel" style="display: none;">
+                    <div id="weight-inputs-area"><p style="font-size: 13px; color: #ddd;">Weights of Edges Connected between Vertices Appears Here (Only for Weighted Graphs).</p></div>
+                    <br>
+                </div>
+            </div>
+            <br><br><br><br>
+        </aside>
+        <main class="center-content">
+            <div id="user-input-container" class="uic">
+                <input type="text" id="user-graph-query" placeholder="e.g., Draw a complete graph 🟢 with 4 nodes..." class="draw">
+                <button id="ask-ai-btn">🪄 Generate Graph</button>
+            </div>
+            <canvas id="canvas" width="846" height="500"></canvas>
+            <div class="button-container">
+                <button id="vertex-btn" title="🔵 Vertex">🔵</button>
+                <button id="edge-btn" title="➖ Edge">➖</button>
+                <button id="weight-btn" title="⚖️ Weight">⚖️</button>
+                <button id="directed" title="↔️ Digraph">↔️</button>
+                <button id="self-loop-btn" onclick="addSelfLoop()" title="♾️ Self Loop">♾️</button>
+                <button id="initial-state-btn" onclick="toggleInitialState()" title="➡️ Initial State" disabled>➡️</button>
+                <button id="final-state-btn" onclick="toggleFinalState()" title="⭕ Final State" disabled>⭕</button>
+                <button id="group-btn" title="🕸️ Group">🕸️</button>
+                <button id="ungroup-btn" title="🔓 Ungroup">🔓</button>
+                <button id="undo-btn" title="↩️ Undo">↩️</button>
+                <button id="redo-btn" title="↪️ Redo">↪️</button>
+                <button id="delete-btn" title="🗑️ Delete">🗑️</button>
+                <button id="reset-btn" title="🔄️ Reset">🔄️</button>
+                <button id="zoom-in-btn" title="Zoom ➕">➕</button>
+                <button id="zoom-out-btn" title="Zoom ➖">➖ </button>
+                <button id="open-matrix-btn" class="abtn" title="📟 Open Matrix Solver">📟</button>
+            </div>
+        </main>
+        <aside class="r-side-panel" id="weight-content">
+    <div class="clock-container">
+        <time id="live-clock">
+            <span id="live-time">00:00:00 AM</span> &nbsp; &nbsp; <span id="live-date">Loading date...</span>
+            <div class="timer-container">
+                <div class="timer-label">⏰ Elapsed Time ⏰</div>
+                <div id="display" class="timer-display">00:00:00</div>
+            </div>
+        </time>
+    </div>
+    <div class="mode-toggle-container" id="mode-toggle-container">
+        <div class="mode-toggle-wrapper" id="mode-toggle-btn">
+            <div id="seg-challenge" class="mode-segment active">🏆 Challenge Mode</div>
+            <div id="seg-solve" class="mode-segment">☑️ Solve Mode</div>
+        </div>
+        <span id="current-mode-text"></span> 
+    </div>
+    <div class="r-panel-content">   
+<textarea id="user-justification" title="Messages written in this area are dynamically saved & read by AI" placeholder="🔨 Resizable User Justification & Doubt Clarification Area 📜: 
+            
+👉 Give your text answer/justification here (e.g., Shortest path is A-B-C with weight 10)
+👉 Ask any doubts in any topic here (e.g., How to use this platform?, Is my graph correct?, What do you mean by DAG? Where is Graph colouring used in real life? What is the real world application of TSP?)
+"></textarea>
+                <div id="solution-container">Solution output will appear here...</div>
+                
+                    <div style="display: flex; gap: 10px; width: 100%; margin: 10px 0;">
+                        <button class="button-row-container" id="solve-btn" style="margin: 0;"><b>☑️ SOLVE</b></button>
+                        <button class="button-row-container" id="refresh-question" style="margin: 0; padding: 5px; display: flex; align-items: center; justify-content: center;">🗽 NEW 🏆 CHALLENGE</button>
+                    </div>
+                    </div>
+                <div id="matrixOverlay">
+                    <div class="overlay-content">
+                        <button id="close-matrix-btn" class="btn">&times;</button>
+                        <h2 style="color: #1e0f8e; margin-bottom: 15px;">Matrix Solver Workspace</h2>
+                        <div id="matrix-display">
+                            <p style="color: #fff; font-size: 12px; text-align: center;">Enter dimensions (row and column) to create a empty matrix.</p>
+                        </div>
+                        <div class="controls" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <input type="number" id="rows-input" placeholder="Rows" min="1" class="wpbbr" style="width: 60px;">
+                            <input type="number" id="cols-input" placeholder="Cols" min="1" class="wpbbr" style="width: 60px;">
+                            <button id="add-matrix-action" class="btn">Add New Matrix</button>
+                        </div>
+                        <div id="multi-matrix-container"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+<script>
+let totalSeconds = 0;
+const displayElement = document.getElementById('display');
+function updateTimer() {
+    totalSeconds++;
+    let hours = Math.floor(totalSeconds / 3600);
+    let minutes = Math.floor((totalSeconds % 3600) / 60);
+    let seconds = totalSeconds % 60;
+    let paddedHours = String(hours).padStart(2, '0');
+    let paddedMinutes = String(minutes).padStart(2, '0');
+    let paddedSeconds = String(seconds).padStart(2, '0');
+    displayElement.textContent = `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
+}
+function resetTimerCount() {
+    totalSeconds = 0;
+    displayElement.textContent = "00:00:00";
+}
+setInterval(updateTimer, 1000);
+const timeElement = document.getElementById('live-time');
+const dateElement = document.getElementById('live-date');
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+});
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+});
+let lastTimestamp = 0;
+function updateLiveClock(currentTimestamp) {
+    if (currentTimestamp - lastTimestamp >= 200 || !lastTimestamp) {
+        const now = new Date();
+        const formattedTime = timeFormatter.format(now);
+        const formattedDate = dateFormatter.format(now);
+        if (timeElement.textContent !== formattedTime) {
+            timeElement.textContent = formattedTime;
+        }
+        if (dateElement.textContent !== formattedDate) {
+            dateElement.textContent = formattedDate;
+        }
+        lastTimestamp = currentTimestamp;
+    }
+    requestAnimationFrame(updateLiveClock);
+}
+requestAnimationFrame(updateLiveClock);
+var acc = document.getElementsByClassName("accordion");
+var i;
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    var panel = this.nextElementSibling.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+const matrixOverlay = document.getElementById('matrixOverlay');
+document.getElementById('open-matrix-btn').onclick = () => matrixOverlay.style.display = 'flex';
+document.getElementById('close-matrix-btn').onclick = () => matrixOverlay.style.display = 'none';
+document.getElementById('add-matrix-action').onclick = () => {
+    const r = document.getElementById('rows-input').value;
+    const c = document.getElementById('cols-input').value;
+    const container = document.getElementById('multi-matrix-container');
+    if (r > 0 && c > 0) {
+        const matrixWrapper = document.createElement('div');
+        matrixWrapper.className = 'matrix-item-container';
+        const delBtn = document.createElement('button');
+        delBtn.innerHTML = '🗑️';
+        delBtn.className = 'delete-matrix-btn';
+        delBtn.onclick = () => matrixWrapper.remove();
+        const title = document.createElement('h4');
+        title.innerText = `Matrix ${r}x${c}`;
+        title.style.color = '#1e0f8e';
+        const grid = document.createElement('div');
+        grid.className = 'matrix-grid';
+        grid.style.gridTemplateColumns = `repeat(${c}, 1fr)`;
+        for (let i = 0; i < r * c; i++) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'matrix-cell';
+            input.placeholder = '0 or inf';
+            input.style.cssText = "width: 100%; border: 1px solid #1e0f8e; text-align: center; padding: 5px; border-radius: 4px;";
+            grid.appendChild(input);
+        }
+        matrixWrapper.appendChild(delBtn);
+        const br = document.createElement('br');
+        matrixWrapper.appendChild(title);
+        matrixWrapper.appendChild(grid);
+        container.appendChild(matrixWrapper);
+        document.getElementById('rows-input').value = '';
+        document.getElementById('cols-input').value = '';
+    } else {
+        alert("Please enter valid rows and columns.");
+    }
+};
+let graph = { vertices: [], edges: [] };
+let history = [];
+let historyIndex = -1;
+let selectedVertex = null;
+let draggingVertex = null;
+let isEdgeMode = false;
+let edgeFromVertex = null;
+let isWeightMode = false;
+let isGroupMode = false;
+let isUngroupMode = false;
+let groups = [];
+let questionSolved = false;
+let questionAttempted = false;
+
+function clearAllModes() {
+    isEdgeMode = false;
+    isWeightMode = false;
+    isGroupMode = false;
+    isUngroupMode = false;
+    isDeleteMode = false; 
+    edgeFromVertex = null;
+    
+    document.getElementById('edge-btn').classList.remove('active');
+    document.getElementById('weight-btn').classList.remove('active');
+    document.getElementById('group-btn').classList.remove('active');
+    document.getElementById('ungroup-btn').classList.remove('active');
+    document.getElementById('delete-btn').classList.remove('active');
+}
+document.getElementById('ungroup-btn').addEventListener('click', () => {
+    clearAllModes();
+    isUngroupMode = true;
+    document.getElementById('ungroup-btn').classList.add('active');
+    
+    if (selectedVertex) {
+        groups = groups.filter(group => !group.includes(selectedVertex));
+        saveState();
+        clearAllModes();
+        selectedVertex = null;
+    } else {
+        alert("Please click and select a vertex inside the group you want to ungroup first!");
+        clearAllModes();
+    }
+});
+
+let isSelfLoopMode = false;
+let isDirectedMode = false;
+let mousePos = { x: 0, y: 0 };
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const weightContent = document.getElementById('weight-inputs-area');
+const vertexDisplay = document.getElementById('vertex-display-list');
+
+const GRID_STEP = 40;          
+let currentScale = 1.0;        
+let offsetX = 0;               
+let offsetY = 0;
+let isPanning = false;
+let startPanX = 0;
+let startPanY = 0;
+const ZOOM_SPEED = 0.1;
+const MAX_ZOOM = 3.0;
+const MIN_ZOOM = 0.2;
+
+function clampZoom(scale) {
+    return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, scale));
+}
+
+function zoomBy(delta, screenX, screenY) {
+    const rect = canvas.getBoundingClientRect();
+    const sx = screenX !== undefined ? screenX : rect.width / 2;
+    const sy = screenY !== undefined ? screenY : rect.height / 2;
+    const worldXBefore = (sx - canvas.width / 2) / currentScale - offsetX;
+    const worldYBefore = (sy - canvas.height / 2) / currentScale - offsetY;
+    currentScale = clampZoom(currentScale + delta);
+    const worldXAfter = (sx - canvas.width / 2) / currentScale - offsetX;
+    const worldYAfter = (sy - canvas.height / 2) / currentScale - offsetY;
+    offsetX += worldXAfter - worldXBefore;
+    offsetY += worldYAfter - worldYBefore;
+}
+
+function resetView() {
+    currentScale = 1.0;
+    offsetX = 0;
+    offsetY = 0;
+}
+
+function drawGrid() {
+    const step = GRID_STEP;
+    const startX = Math.floor((-offsetX - (canvas.width / 2) / currentScale) / step) * step;
+    const endX = Math.ceil((-offsetX + (canvas.width / 2) / currentScale) / step) * step;
+    const startY = Math.floor((-offsetY - (canvas.height / 2) / currentScale) / step) * step;
+    const endY = Math.ceil((-offsetY + (canvas.height / 2) / currentScale) / step) * step;
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 0.5 / currentScale;
+    for (let x = startX; x <= endX; x += step) {
+        ctx.beginPath();
+        ctx.moveTo(x, startY);
+        ctx.lineTo(x, endY);
+        ctx.stroke();
+    }
+    for (let y = startY; y <= endY; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(startX, y);
+        ctx.lineTo(endX, y);
+        ctx.stroke();
+    }
+
+    ctx.strokeStyle = '#ff0000';
+    ctx.lineWidth = 0.5 / currentScale;
+    ctx.beginPath();
+    ctx.moveTo(startX, 0);
+    ctx.lineTo(endX, 0);
+    ctx.moveTo(0, startY);
+    ctx.lineTo(0, endY);
+    ctx.stroke();
+
+    const ah = 10 / currentScale;
+    ctx.fillStyle = '#ff0000';
+    ctx.beginPath();
+    ctx.moveTo(endX, 0);
+    ctx.lineTo(endX - ah, -ah / 2);
+    ctx.lineTo(endX - ah, ah / 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, startY);
+    ctx.lineTo(-ah / 2, startY + ah);
+    ctx.lineTo(ah / 2, startY + ah);
+    ctx.closePath();
+    ctx.fill();
+
+    const tickLen = 4 / currentScale;
+    ctx.fillStyle = '#0000ff';
+    ctx.strokeStyle = '#0000ff';
+    ctx.lineWidth = 1 / currentScale;
+    ctx.font = `${Math.max(9, 12 / currentScale)}px Arial`;
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    for (let x = startX; x <= endX; x += step) {
+        if (x === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(x, -tickLen);
+        ctx.lineTo(x, tickLen);
+        ctx.stroke();
+        ctx.fillText(Math.round(x / step), x, tickLen + 2 / currentScale);
+    }
+
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    for (let y = startY; y <= endY; y += step) {
+        if (y === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(-tickLen, y);
+        ctx.lineTo(tickLen, y);
+        ctx.stroke();
+        ctx.fillText(Math.round(-y / step), -tickLen - 2 / currentScale, y);
+    }
+
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText('0', -tickLen - 2 / currentScale, tickLen + 2 / currentScale);
+}
+
+function updateSolveButtonState() {
+    const solveBtn = document.getElementById('solve-btn');
+    if (!solveBtn) return;
+    if (graph.vertices.length > 0) {
+        questionAttempted = true;
+    }
+    solveBtn.disabled = (!questionAttempted) || questionSolved;
+}
+
+function drawGraph() {
+        requestAnimationFrame(drawGraph);
+        updateSolveButtonState();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.scale(currentScale, currentScale);
+        ctx.translate(offsetX, offsetY);
+        
+        groups.forEach(group => {
+            if (group.length === 0) return;
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            group.forEach(v => {
+                if (v.x < minX) minX = v.x;
+                if (v.y < minY) minY = v.y;
+                if (v.x > maxX) maxX = v.x;
+                if (v.y > maxY) maxY = v.y;
+            });
+            let padding = 35;
+            let x = minX - padding;
+            let y = minY - padding;
+            let w = (maxX - minX) + padding * 2;
+            let h = (maxY - minY) + padding * 2;
+            let r = 15;
+            ctx.fillStyle = 'rgba(0, 74, 173, 0.5)';
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+            ctx.fill();
+        });
+
+        drawGrid();
+    graph.edges.forEach((edge) => {
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        if (edge.from === edge.to) {
+            const r = 20; 
+            const x = edge.from.x;
+            const y = edge.from.y - 25; 
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, 2 * Math.PI);
+            ctx.stroke();
+            if (isDirectedMode) {
+                ctx.beginPath();
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + r - 5, y + 5);
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + r + 5, y + 5);
+                ctx.stroke();
+            }
+            if (isWeightMode && edge.weight !== undefined) {
+                ctx.font = 'bold 14px Arial';
+                ctx.fillStyle = 'red';
+                ctx.fillText(edge.weight, x, y - r - 5);
+            }
+        } else {
+            ctx.beginPath();
+            ctx.moveTo(edge.from.x, edge.from.y);
+            ctx.lineTo(edge.to.x, edge.to.y);
+            ctx.stroke();
+            if (isDirectedMode) {
+                const headlen = 15;
+                const angle = Math.atan2(edge.to.y - edge.from.y, edge.to.x - edge.from.x);
+                const offsetX = 20 * Math.cos(angle);
+                const offsetY = 20 * Math.sin(angle);
+                const arrowX = edge.to.x - offsetX;
+                const arrowY = edge.to.y - offsetY;
+                ctx.beginPath();
+                ctx.moveTo(arrowX, arrowY);
+                ctx.lineTo(arrowX - headlen * Math.cos(angle - Math.PI / 6), arrowY - headlen * Math.sin(angle - Math.PI / 6));
+                ctx.moveTo(arrowX, arrowY);
+                ctx.lineTo(arrowX - headlen * Math.cos(angle + Math.PI / 6), arrowY - headlen * Math.sin(angle + Math.PI / 6));
+                ctx.stroke();
+            }
+            if (isWeightMode && edge.weight !== undefined) {
+                ctx.font = 'bold 14px Arial';
+                ctx.fillStyle = 'red';
+                ctx.fillText(edge.weight, (edge.from.x + edge.to.x) / 2, (edge.from.y + edge.to.y) / 2);
+            }
+        }
+    });
+    if (isEdgeMode && edgeFromVertex && mousePos) {
+        ctx.beginPath();
+        ctx.setLineDash([5, 5]);
+        ctx.moveTo(edgeFromVertex.x, edgeFromVertex.y);
+        ctx.lineTo(mousePos.x, mousePos.y);
+        ctx.strokeStyle = '#162cec';
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+    graph.vertices.forEach((vertex) => {
+        if (vertex.isInitial) {
+            ctx.beginPath();
+            ctx.strokeStyle = '#4f66f7';
+            ctx.lineWidth = 1;
+            ctx.moveTo(vertex.x - 45, vertex.y);
+            ctx.lineTo(vertex.x - 20, vertex.y);
+            ctx.moveTo(vertex.x - 20, vertex.y);
+            ctx.lineTo(vertex.x - 28, vertex.y - 6);
+            ctx.moveTo(vertex.x - 20, vertex.y);
+            ctx.lineTo(vertex.x - 28, vertex.y + 6);
+            ctx.stroke();
+        }
+            ctx.beginPath();
+            ctx.arc(vertex.x, vertex.y, 20, 0, 2 * Math.PI);
+            ctx.fillStyle = (selectedVertex === vertex) ? '#4f66f7' : (vertex.color || '#003a87');
+            ctx.fill();
+            ctx.strokeStyle = '#004aad';
+            ctx.lineWidth = vertex.isFinal ? 5 : 1.5;
+            ctx.stroke();
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(vertex.label, vertex.x, vertex.y);            
+        });
+        ctx.restore();
+    }
+    canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const rawX = e.clientX - rect.left;
+        const rawY = e.clientY - rect.top;
+        const x = (rawX - canvas.width / 2) / currentScale- offsetX;
+        const y = (rawY - canvas.height / 2) / currentScale- offsetY;
+        draggingVertex = null;
+        let clickedVertex = null;
+        graph.vertices.forEach(v => {
+            if (Math.hypot(x - v.x, y - v.y) < 20) {
+                clickedVertex = v;
+            }
+        });
+        if (clickedVertex) {
+            if (isGroupMode) {
+                if (!e.ctrlKey && !e.shiftKey) {
+                    let targetGroup = groups.find(g => g.includes(clickedVertex));
+                    if (targetGroup) {
+                        if (selectedVertex && targetGroup.includes(selectedVertex) && !targetGroup.includes(clickedVertex)) {
+                            // Leave intentional slot open if group structure processing gets added here later
+                        } else {
+                            selectedVertex = clickedVertex;
+                        }
+                    } else if (selectedVertex && selectedVertex !== clickedVertex) {
+                        let existingGroupOfSelected = groups.find(g => g.includes(selectedVertex));
+                        if (existingGroupOfSelected) {
+                            existingGroupOfSelected.push(clickedVertex);
+                        } else {
+                            groups.push([selectedVertex, clickedVertex]);
+                        }
+                        selectedVertex = clickedVertex;
+                        saveHistory();
+                    } else {
+                        selectedVertex = clickedVertex;
+                    }
+                }
+            } else {
+                draggingVertex = clickedVertex;
+                draggingVertex.lastX = draggingVertex.x;
+                draggingVertex.lastY = draggingVertex.y;
+                selectedVertex = clickedVertex;
+                document.getElementById('vertex-color-picker').value = clickedVertex.color || '#a7b1f2';
+                saveHistory();
+            }
+        } else {
+            selectedVertex = null;
+            isPanning = true;
+            startPanX = e.clientX;
+            startPanY = e.clientY;
+        }
+    });
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const rawX = e.clientX - rect.left;
+        const rawY = e.clientY - rect.top;
+        mousePos.x = (rawX - canvas.width / 2) / currentScale - offsetX;
+        mousePos.y = (rawY - canvas.height / 2) / currentScale - offsetY;
+        
+        if (draggingVertex) {
+            let dx = mousePos.x - draggingVertex.lastX;
+            let dy = mousePos.y - draggingVertex.lastY;
+            let nodeGroup = groups.find(g => g.includes(draggingVertex));
+            if (nodeGroup) {
+                nodeGroup.forEach(v => {
+                    v.x += dx;
+                    v.y += dy;
+                });
+            } else {
+                draggingVertex.x = mousePos.x;
+                draggingVertex.y = mousePos.y;
+            }
+            draggingVertex.lastX = mousePos.x;
+            draggingVertex.lastY = mousePos.y;
+        } else if (isPanning) {
+            const dx = e.clientX - startPanX;
+            const dy = e.clientY - startPanY;
+            offsetX += dx / currentScale;
+            offsetY += dy / currentScale;
+            startPanX = e.clientX;
+            startPanY = e.clientY;
+        }
+    });
+    canvas.addEventListener('mouseup', () => {
+        draggingVertex = null;
+        isPanning = false;
+    });
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const rawX = e.clientX - rect.left;
+        const rawY = e.clientY - rect.top;
+        const x = (rawX - canvas.width / 2) / currentScale - offsetX;
+        const y = (rawY - canvas.height / 2) / currentScale - offsetY;
+        if (isWeightMode) {
+            graph.edges.forEach(edge => {
+                const midX = (edge.from.x + edge.to.x) / 2;
+                const midY = (edge.from.y + edge.to.y) / 2;
+                if (Math.hypot(x - midX, y - midY) < 15) {
+                    const newVal = prompt(`Enter new weight for ${edge.from.label}-${edge.to.label}:`, edge.weight);
+                    if (newVal !== null) {
+                        edge.weight = parseInt(newVal) || 0;
+                        saveHistory();
+                    }
+                }
+            });
+        }
+        if (!isEdgeMode) return;
+        graph.vertices.forEach((vertex) => {
+            if (Math.hypot(x - vertex.x, y - vertex.y) < 20) {
+                if (!edgeFromVertex) {
+                    edgeFromVertex = vertex;
+                } else if (edgeFromVertex !== vertex) {
+                    const existingEdge = graph.edges.find(e => e.from === edgeFromVertex && e.to === vertex);
+                    if (!existingEdge) {
+                        graph.edges.push({ from: edgeFromVertex, to: vertex, weight: 0 });
+                        saveHistory();
+                    }
+                    edgeFromVertex = null;
+                }
+            }
+        });
+    });
+    const GRID_SIZE = 40; 
+    const vertexColorPicker = document.createElement('input');
+    vertexColorPicker.type = 'color';
+    vertexColorPicker.id = 'vertex-color-picker';
+    vertexColorPicker.value = '#004aad';
+    vertexColorPicker.title = 'Choose Vertex Color';    
+    vertexColorPicker.style.position = 'fixed';
+    vertexColorPicker.style.bottom = '16px';
+    vertexColorPicker.style.right = '20px';
+    vertexColorPicker.style.zIndex = '1001'; 
+    vertexColorPicker.style.cursor = 'pointer';
+    vertexColorPicker.style.border = 'none';
+    vertexColorPicker.style.padding = '2px';
+    vertexColorPicker.style.background = '#fff';
+    vertexColorPicker.style.borderRadius = '5px';
+    vertexColorPicker.style.outline = 'none';
+    document.body.appendChild(vertexColorPicker);
+    vertexColorPicker.addEventListener('input', (e) => {
+        if (selectedVertex) {
+            selectedVertex.color = e.target.value;
+            saveHistory();
+        }
+    });
+    document.getElementById('vertex-btn').addEventListener('click', () => {
+        const label = prompt("Enter vertex label:");
+        if (label) {
+            const margin = 80;
+            const visibleW = canvas.width / currentScale;
+            const visibleH = canvas.height / currentScale;
+            const worldLeft  = -canvas.width  / 2 / currentScale - offsetX + margin / currentScale;
+            const worldTop   = -canvas.height / 2 / currentScale - offsetY + margin / currentScale;
+            const worldRight  = worldLeft + visibleW - 2 * margin / currentScale;
+            const worldBottom = worldTop  + visibleH - 2 * margin / currentScale;
+            let nextX = Math.round((worldLeft + Math.random() * (worldRight  - worldLeft)) / GRID_SIZE) * GRID_SIZE;
+            let nextY = Math.round((worldTop  + Math.random() * (worldBottom - worldTop))  / GRID_SIZE) * GRID_SIZE;
+            while (graph.vertices.some(v => v.x === nextX && v.y === nextY)) {
+                nextX += GRID_SIZE;
+            }
+            const chosenColor = document.getElementById('vertex-color-picker').value;
+            graph.vertices.push({ label: label, x: nextX, y: nextY, color: chosenColor });
+            saveHistory();
+            updateVertexList();
+        }
+        else {
+            weightContent.innerHTML = '<p style="font-size: 13px; color: #ddd;">Vertex details will appear here.</p>';
+        }
+    });
+    document.getElementById('edge-btn').addEventListener('click', function() {
+        isEdgeMode = !isEdgeMode;
+        this.style.backgroundColor = isEdgeMode ? "#1e0f8e" : "#2915c0";
+        if (!isEdgeMode) edgeFromVertex = null;
+        if (isEdgeMode) {
+            isGroupMode = false;
+            document.getElementById('group-btn').style.backgroundColor = "#2915c0";
+        }
+    });
+    document.getElementById('group-btn').addEventListener('click', () => {
+        const nextState = !isGroupMode;
+        clearAllModes();
+        isGroupMode = nextState;
+        if (isGroupMode) document.getElementById('group-btn').classList.add('active');
+    });
+    document.getElementById('ungroup-btn').addEventListener('click', () => {
+        const nextState = !isUngroupMode;
+        clearAllModes();
+        isUngroupMode = nextState;
+        if (isUngroupMode) document.getElementById('ungroup-btn').classList.add('active');
+    });
+    document.getElementById('weight-btn').addEventListener('click', () => {
+        isWeightMode = !isWeightMode;
+        weightContent.innerHTML = '';
+        if (isWeightMode) {
+            graph.edges.forEach((edge, i) => {
+                const container = document.createElement('div');
+                container.style.cssText = 'display: flex; align-items: center; gap: 5px; margin-bottom: 5px;';
+                const label = document.createElement('span');
+                label.style.cssText = 'color: #fff; font-size: 12px; min-width: 70px;';
+                label.textContent = `${edge.from.label} → ${edge.to.label}:`;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'weight-input-field';
+                input.value = (edge.weight !== undefined && edge.weight !== 0 && edge.weight !== '0') ? edge.weight : '';
+                input.placeholder = 'Weight';
+                input.style.width = '60px';
+                input.oninput = () => {
+                    edge.weight = input.value;
+                };
+                container.appendChild(label);
+                container.appendChild(input);
+                weightContent.appendChild(container);
+            });
+        } else {
+            weightContent.innerHTML = '<p style="font-size: 13px; color: #ddd;">Enable "Weight" to edit edges.</p>';
+        }
+    });
+    document.getElementById('reset-btn').addEventListener('click', () => {
+        graph = { vertices: [], edges: [] };
+        selectedVertex = null;
+        edgeFromVertex = null;
+        updateVertexList();
+        weightContent.innerHTML = '';
+        saveHistory();
+        resetView();
+    });
+    function updateVertexList() {
+        if (graph.vertices.length > 0) {
+            vertexDisplay.innerHTML = '';
+            graph.vertices.forEach((v) => {
+                const container = document.createElement('div');
+                container.style.cssText = 'padding:5px; border-bottom:1px solid #ddd; color: #fff; display: flex; align-items: center; gap: 5px;';
+                const labelText = document.createElement('span');
+                labelText.textContent = 'Vertex: ';
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = v.label;
+                input.style.cssText = 'background: transparent; border: 1px solid #555; color: #fff; border-radius: 4px; padding: 2px 5px; width: 80px; font-weight: bold;';
+                input.oninput = () => {
+                    v.label = input.value;
+                };
+                container.appendChild(labelText);
+                container.appendChild(input);
+                vertexDisplay.appendChild(container);
+            });
+        } else {
+            vertexDisplay.innerHTML = '<p style="font-size: 13px; color: #ddd;">Vertex details will appear here.</p>';
+        }
+    }
+    document.getElementById('directed').addEventListener('click', function() {
+        isDirectedMode = !isDirectedMode;
+        this.style.backgroundColor = isDirectedMode ? "#1e0f8e" : "#2915c0";
+    });
+    function addSelfLoop() {
+        if (selectedVertex) {
+            const existingLoop = graph.edges.find(e => e.from === selectedVertex && e.to === selectedVertex);
+            if (!existingLoop) {
+                graph.edges.push({ 
+                    from: selectedVertex, 
+                    to: selectedVertex, 
+                    weight: 0 
+                });
+                saveHistory();
+            } else {
+                alert("Self-loop already exists for this vertex!");
+            }
+        } else {
+            alert("Please click and highlight a vertex first!");
+        }
+    }
+    const aboutOverlay = document.getElementById('about-iframe-overlay');
+    if (document.getElementById('about')) {
+        document.getElementById('about').onclick = () => aboutOverlay.style.display = 'block';
+    }
+    if (document.getElementById('about-close-btn')) {
+        document.getElementById('about-close-btn').onclick = () => aboutOverlay.style.display = 'none';
+    }
+    let appMode = "AI_CHALLENGE"; 
+    document.getElementById('mode-toggle-btn').onclick = function() {
+        const segChallenge = document.getElementById('seg-challenge');
+        const segSolve = document.getElementById('seg-solve');
+        const userInputContainer = document.getElementById('user-input-container');
+        const welcomeContainer = document.getElementById('welcome-container');
+        if (appMode === "AI_CHALLENGE") {
+            appMode = "USER_ASK";
+            segSolve.classList.add('active');
+            segChallenge.classList.remove('active');
+            userInputContainer.classList.add('visible');
+            welcomeContainer.innerText = "Tell me what graph to draw!";
+        } else {
+            appMode = "AI_CHALLENGE";
+            segChallenge.classList.add('active');
+            segSolve.classList.remove('active');
+            userInputContainer.classList.remove('visible');
+            graph = { vertices: [], edges: [] };
+            selectedVertex = null;
+            edgeFromVertex = null;
+            updateVertexList();
+            fetchNewQuestion();
+        }
+    };
+    function saveHistory() {
+        const state = JSON.stringify(graph);
+        if (historyIndex < history.length - 1) {
+            history = history.slice(0, historyIndex + 1);
+        }  
+        if (history.length === 0 || history[historyIndex] !== state) {
+            history.push(state);
+            historyIndex++;
+        }
+    }
+    function redo() {
+        if (historyIndex < history.length - 1) {
+            historyIndex++;
+            graph = JSON.parse(history[historyIndex]);
+            reconnectEdges();
+            updateVertexList();
+        }
+    }
+    function undo() {
+        if (historyIndex > 0) {
+            historyIndex--;
+            graph = JSON.parse(history[historyIndex]);
+            reconnectEdges();
+            updateVertexList();
+        }
+    }
+    function deleteSelected() {
+        if (selectedVertex) {
+            graph.vertices = graph.vertices.filter(v => v !== selectedVertex);
+            graph.edges = graph.edges.filter(e => e.from !== selectedVertex && e.to !== selectedVertex);
+            if (edgeFromVertex === selectedVertex) edgeFromVertex = null;
+            selectedVertex = null;
+            updateVertexList();
+            saveHistory();
+        }
+    }
+    document.getElementById('undo-btn').addEventListener('click', undo);
+    document.getElementById('redo-btn').addEventListener('click', redo);
+    document.getElementById('delete-btn').addEventListener('click', deleteSelected);
+    window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+            deleteSelected();
+        }
+        if (e.ctrlKey && e.key.toLowerCase() === 'z') {
+            e.preventDefault();
+            undo();
+        }
+        if (e.ctrlKey && e.key.toLowerCase() === 'y') {
+            e.preventDefault();
+            redo();
+        }
+    });
+
+    document.getElementById('solve-btn').onclick = () => {
+        const activeTopic = document.getElementById('graph-topic').value;
+        const question = document.getElementById('welcome-container').innerText;
+        const solutionOutput = document.getElementById('solution-container');
+        const justification = document.getElementById('user-justification').value.trim();
+        const refreshBtn = document.getElementById('refresh-question');
+        if (!justification) {
+            alert("Justification is compulsory! Please explain your answer in the text area.");
+            return;
+        }    
+        const matrixContainers = document.querySelectorAll('#multi-matrix-container .matrix-item-container');
+        const matrixData = Array.from(matrixContainers).map(container => {
+            const cells = container.querySelectorAll('.matrix-cell');
+            const gridColumns = parseInt(container.querySelector('.matrix-grid').style.gridTemplateColumns.match(/\d+/)[0]) || 1;
+            const rowsArray = [];
+            let currentRow = [];
+            cells.forEach((cell, index) => {
+                let val = cell.value.toLowerCase().trim();
+                currentRow.push(val === 'inf' ? 'inf' : (val || '0'));
+                if ((index + 1) % gridColumns === 0) {
+                    rowsArray.push(currentRow);
+                    currentRow = [];
+                }
+            });
+            return {
+                title: container.querySelector('h4').innerText,
+                grid: rowsArray
+            };
+        });
+        solutionOutput.innerText = "AI is evaluating your solution (Graph + Justification + Matrix)...";
+        fetch('/api/evaluate-answer', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                topic: document.getElementById('graph-topic').value,
+                query: question,
+                current_graph: JSON.stringify(graph),
+                justification: justification,
+                processed_matrix: matrixData.length > 0 ? JSON.stringify(matrixData) : "None"
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const responseText = data.evaluation;
+            const upperResponse = responseText.toUpperCase();
+            resetTimerCount();
+            if (upperResponse.startsWith("CORRECT")) {
+                const restOfText = responseText.substring(upperResponse.indexOf("CORRECT") + 7);
+                solutionOutput.innerHTML = `<span style="color: #28a745; font-weight: bold;">CORRECT</span>${restOfText}`;
+                refreshBtn.innerText = "🌟 Next Question";
+                refreshBtn.style.backgroundColor = "#28a745";
+                questionSolved = true;
+                const currentTopic = document.getElementById('graph-topic').value;
+                incrementTopicCount(currentTopic);
+                incrementTotalSolved();
+            } else if (upperResponse.startsWith("PARTIALLY CORRECT")) {
+                const restOfText = responseText.substring(17);
+                solutionOutput.innerHTML = `<span style="color: #ffd700; font-weight: bold;">PARTIALLY CORRECT</span>${restOfText}`;
+                refreshBtn.innerText = "Get New Question";
+                refreshBtn.style.backgroundColor = "#2915c0";
+                questionSolved = false;
+            } else if (upperResponse.startsWith("INCORRECT")) {
+                const restOfText = responseText.substring(9); 
+                solutionOutput.innerHTML = `<span style="color: #ff4d4d; font-weight: bold;">INCORRECT</span>${restOfText}`;
+                refreshBtn.innerText = "Get New Question";
+                refreshBtn.style.backgroundColor = "#2915c0";
+                questionSolved = false;
+            } else {
+                solutionOutput.innerText = responseText;
+                refreshBtn.innerText = "Get New Question";
+                refreshBtn.style.backgroundColor = "#2915c0";
+                questionSolved = false;
+            }
+        });
+    };
+    function reconnectEdges() {
+        graph.edges = graph.edges.map(edge => {
+            const fromNode = graph.vertices.find(v => v.label === (edge.from.label || edge.from_label));
+            const toNode = graph.vertices.find(v => v.label === (edge.to.label || edge.to_label));     
+            if (fromNode && toNode) {
+                return { ...edge, from: fromNode, to: toNode };
+            }
+            return null;
+        }).filter(edge => edge !== null);
+    }
+    const FALLBACK_NAMES = ["Aarav", "Meera", "Rohan", "Diya", "Karthik", "Ananya", "Vikram", "Priya", "Arjun", "Sneha"];
+
+    async function getRandomPersonName() {
+        try {
+            const res = await fetch('https://randomuser.me/api/?nat=us,gb,in&inc=name');
+            if (!res.ok) throw new Error('randomuser.me request failed');
+            const json = await res.json();
+            const first = json?.results?.[0]?.name?.first;
+            if (first) {
+                return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
+            }
+            throw new Error('No name in response');
+        } catch (err) {
+            console.warn('Random user API unavailable, using local fallback name:', err);
+            return FALLBACK_NAMES[Math.floor(Math.random() * FALLBACK_NAMES.length)];
+        }
+    }
+
+    function generateNodeEdgeCounts(topic) {
+        const nodes = Math.floor(Math.random() * (10 - 4 + 1)) + 4;
+        const minEdges = nodes - 1;
+        const maxEdges = Math.min((nodes * (nodes - 1)) / 2, nodes * 2);
+        const topicLower = (topic || "").toLowerCase();
+        let edges;
+        if (["tree", "spanning", "acyclic", "dag"].some(k => topicLower.includes(k))) {
+            edges = minEdges;
+        } else {
+            edges = Math.floor(Math.random() * (maxEdges - minEdges + 1)) + minEdges;
+        }
+        return { nodes, edges };
+    }
+
+    function buildSafetyQuestion(name, nodes, edges) {
+        return `${name} wants to generate a graph using ${nodes} vertices and ${edges} edges. Help the person to generate the graph.`;
+    }
+
+    async function fetchNewQuestion() {
+        const topicElement = document.getElementById('graph-topic');
+        const challengeDisplay = document.getElementById('welcome-container');
+        if (!topicElement || !challengeDisplay) return;
+        const topic = topicElement.value;
+        challengeDisplay.innerText = "Generating New Question...";
+        questionSolved = false;
+        questionAttempted = false;
+        const refreshBtn = document.getElementById('refresh-question');
+        if (refreshBtn) {
+            refreshBtn.innerText = "🗽 NEW 🏆 CHALLENGE";
+            refreshBtn.style.backgroundColor = "";
+        }
+        const solutionOutput = document.getElementById('solution-container');
+        if (solutionOutput) {
+            solutionOutput.innerText = "Solution output will appear here...";
+        }
+        const name = await getRandomPersonName();
+        const { nodes, edges } = generateNodeEdgeCounts(topic);
+
+        try {
+            const response = await fetch('/api/generate-question', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic: topic, nodes: nodes, edges: edges })
+            });
+            if (!response.ok) {
+                const errBody = await response.json().catch(() => null);
+                throw new Error(errBody?.detail || `HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.error) {
+                challengeDisplay.innerText = "Failed to load challenge";
+                alert(data.error);
+                return;
+            }
+
+            let questionText;
+            if (data.ai_generated) {
+                const template = data.template || data.question || "";
+                questionText = template
+                    .split("{NAME}").join(name)
+                    .split("{NODES}").join(String(nodes))
+                    .split("{EDGES}").join(String(edges));
+            } else {
+                console.warn('Groq did not generate a question; using the non-AI safety-net generator.');
+                questionText = buildSafetyQuestion(name, nodes, edges);
+            }
+
+            challengeDisplay.innerText = questionText;
+            window.currentQuestionNodes = nodes;
+            window.currentQuestionEdges = edges;
+
+        if (data.graph) {
+            graph.vertices = [];
+            graph.edges = [];
+            const angleStep = (2 * Math.PI) / data.graph.vertices.length;
+            const radius = 150;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;    
+            data.graph.vertices.forEach((vLabel, index) => {
+                const x = centerX + radius * Math.cos(index * angleStep);
+                const y = centerY + radius * Math.sin(index * angleStep);
+                graph.vertices.push({ x, y, label: String(vLabel) });
+            });
+            if (data.graph.edges) {
+                data.graph.edges.forEach(e => {
+                    const fromNode = graph.vertices.find(v => String(v.label) === String(e.from));
+                    const toNode = graph.vertices.find(v => String(v.label) === String(e.to));
+                    if (fromNode && toNode) {
+                        graph.edges.push({ from: fromNode, to: toNode, weight: e.weight !== undefined ? e.weight : '' });
+                    }
+                });
+            }
+        }
+        } catch (error) {
+            console.error('Error fetching challenge, using the non-AI safety-net generator:', error);
+            const questionText = buildSafetyQuestion(name, nodes, edges);
+            challengeDisplay.innerText = questionText;
+            window.currentQuestionNodes = nodes;
+            window.currentQuestionEdges = edges;
+        }
+    }
+    document.getElementById('ask-ai-btn').onclick = () => {
+        const userQuery = document.getElementById('user-graph-query').value;
+        const solutionOutput = document.getElementById('solution-container');   
+        if(!userQuery) return alert("Please enter a request!");
+        solutionOutput.innerText = "AI is calculating coordinates...";
+        fetch('/process-graph', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                mode: "USER_ASK",
+                query: userQuery,
+                graph: graph
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            try {
+                let rawResponse = data.response;
+                let jsonStart = rawResponse.indexOf('{');
+                let jsonEnd = rawResponse.lastIndexOf('}') + 1;
+                if (jsonStart === -1 || jsonEnd === 0) throw new Error("No valid JSON");
+                let cleanResponse = rawResponse.substring(jsonStart, jsonEnd);
+                const newGraphData = JSON.parse(cleanResponse);
+                graph.vertices = [];
+                graph.edges = [];
+                graph.vertices = newGraphData.vertices || [];
+                graph.edges = (newGraphData.edges || []).map(edge => {
+                    const fromNode = graph.vertices.find(v => v.label === edge.from_label);
+                    const toNode = graph.vertices.find(v => v.label === edge.to_label);
+                    if (fromNode && toNode) return { from: fromNode, to: toNode, weight: edge.weight || 0 };
+                    return null;
+                }).filter(e => e !== null);
+                updateVertexList();
+                saveHistory();
+                solutionOutput.innerText = "Graph rendered successfully.";
+            } catch (e) {
+                console.error("Processing Error:", e);
+                solutionOutput.innerText = "AI failed to format the graph properly.";
+            }
+        })
+        .catch(err => {
+            console.error("Fetch Error:", err);
+            solutionOutput.innerText = "Connection error.";
+        });
+    };
+    function toggleInitialState() {
+        const initialBtn = document.getElementById('initial-state-btn');
+        if (initialBtn.hasAttribute('disabled') || initialBtn.disabled) {
+            alert("The accessability to this button for this topic is disabled!");
+            return;
+        }
+        if (selectedVertex) {
+            selectedVertex.isInitial = !selectedVertex.isInitial;
+            saveHistory();
+        } else {
+            alert("Please click and highlight a vertex first!");
+        }
+    }
+    function toggleFinalState() {
+        const finalBtn = document.getElementById('final-state-btn');
+        if (finalBtn.hasAttribute('disabled') || finalBtn.disabled) {
+            alert("The accessability to this button for this topic is disabled!");
+            return;
+        }
+        if (selectedVertex) {
+            selectedVertex.isFinal = !selectedVertex.isFinal;
+            saveHistory();
+        } else {
+            alert("Please click and highlight a vertex first!");
+        }
+    }
+    function updateStateButtonsVisibility() {
+        const topic = document.getElementById('graph-topic').value;
+        const initialBtn = document.getElementById('initial-state-btn');
+        const finalBtn = document.getElementById('final-state-btn');
+        const allowedTopics = [
+            "Automata Theory - I (NFA/DFA construction using Regular Expression)",
+            "Automata Theory - II (DFA to NFA/NFA to DFA Conversion)",
+            "DAG",
+            "Automata-Theory-I-NFA-DFA-construction-using-Regular-Expression",
+            "Automata-Theory-II-DFA-to-NFA-NFA-to-DFA-Conversion",
+            "DAG (Directed Acyclic Graphs)"
+        ];
+        if (allowedTopics.includes(topic)) {
+            initialBtn.disabled = false;
+            finalBtn.disabled = false;
+            initialBtn.style.pointerEvents = "auto";
+            finalBtn.style.pointerEvents = "auto";
+        } else {
+            initialBtn.disabled = false;
+            finalBtn.disabled = false;
+            initialBtn.setAttribute('disabled', 'true');
+            finalBtn.setAttribute('disabled', 'true');
+            initialBtn.style.pointerEvents = "auto";
+            finalBtn.style.pointerEvents = "auto";
+        }
+    }
+    const algoDescriptions = {
+        "Spanning-Tree": "A Spanning Tree connects all vertices in a graph together using least possible lines, with no loops or closed paths.",
+        "Binary-Tree": "A Binary Tree is a hierarchial tree where every vertex acts as a parent that can split into atmost two children (left or right or both).",
+        "Binary-Search-Tree": "A Binary Search Tree is a sorted tree where smaller values go to the left side and larger values go to the right side of the parent vertex of that vertex containing that value.",
+        "B-Tree": "A B-Tree is a balanced search tree designed to handle large amounts of data (like databases) by letting vertices hold multiple elements and many children at once.",
+        "B-Plus-Tree": "A B+ Tree is a variation of the B-Tree where actual data is stored only at the very bottom row (leaves) and linked together for easy step-by-step reading.",
+        "AVL-Tree": "An AVL Tree is a self-adjusting binary search tree that automatically keeps its left and right sides balanced in height so searching never slows down.",
+        "Red-Black-Tree": "A Red Black Tree is a balanced search tree that uses a quick coloring trick (labeling items 'red' or 'black') to automatically keep the data structure level and tidy.",
+        "Segment-Tree": "A Segment Tree is a tree that is built to look at ranges of numbers, letting you quickly find things like the minimum value or sum inside a specific slice of a list.",
+        "Heap-Tree": "A Heap or Heap Tree is where the top item is always the absolute largest (Max-Heap) or smallest (Min-Heap), useful for building quick priority lines.",
+        "Prim's-Algorithm": "Prim's Algorithm builds a minimum connector path by starting at a single point and repeatedly adding the cheapest available connection next to it.",
+        "Kruskal's-Algorithm": "Kruskal's Algorithm builds a minimum connector path by sorting all connections from cheapest to most expensive and adding them one by one if they don't form loops.",
+        "Dijkstra's-Algorithm": "Dijkstra's Algorithm finds the absolute fastest route from your starting point to every other location on a map, assuming no shortcuts have negative travel time.",
+        "Floyd-Warshall-Algorithm": "Floyd Warshall Algorithm calculates the shortest paths between every single pair of points on a map all at once, even if some routes have negative values.",
+        "Bellman-Ford-Algorithm": "Bellman Ford Algorithm finds the shortest route from a starting point to everywhere else, with the added benefit of catching 'infinite loop traps' where costs drop forever.",
+        "Kahn's-Algorithm": "Kahn's Algorithm finds a valid step-by-step order to complete tasks with dependencies (like a college course checklist where you must finish prerequisites first).",
+        "Johnson's-Algorithm": "Johnson's Algorithm is a clever technique that fixes negative maps so that Dijkstra's fast routing can find the shortest paths between all pairs of locations safely.",
+        "Boruvka's-Algorithm": "Boruvka's Algorithm is an old-school method that connects points by looking at all isolated groups simultaneously and picking the cheapest edge out of each group.",
+        "Ford-Fulkerson's-Algorithm": "Ford Fulkerson's Algorithm finds the maximum amount of traffic, water, or data that can flow through a network pipeline without bottlenecking at narrow links.",
+        "Dinic's-Algorithm": "Dinic's Algorithm is a faster, structured approach to finding maximum network flow by breaking the pipeline into clean layers before pushing traffic through.",
+        "Karger's-Algorithm": "Karger's Algorithm is a randomized approach that cuts a network into separate parts with the fewest cuts possible by randomly combining connections until only two clusters remain.",
+        "Peterson's-Algorithm": "Peterson's Algorithm is a digital protocol that stops two computer processes from using the exact same resource or variable at the same time, avoiding collisions.",
+        "TSP": "The Travelling Salesman Problem: Finding the absolute shortest circular route to visit a list of destinations exactly once and return home.",
+        "Graph-Vertex-Edges-different-types": "The basic building blocks of networks, where 'Vertices' are the junction dots and 'Edges' are the lines connecting them.",
+        "Euler-Path-and-Circuit": "An Euler Path crosses every single connection line on the board exactly once. A Circuit does this and ends right where it started.",
+        "Hamiltonian-Path-and-Circuit": "A Hamiltonian Path visits every single junction dot on the map exactly once. A Circuit does this and returns to the initial starting point.",
+        "Lattice-Partially-Ordered-Set": "A Lattice is a structured arrangement of items where any two components have a clear, unique common ceiling (upper boundary) and common floor (lower boundary).",
+        "Cycle-Detection": "Cycle Detection is a testing process to find out if a graph network contains a loop that lets you travel in circles indefinitely.",
+        "Directed-and-Undirected-Graphs": "Undirected graphs are two-way streets where you can walk either way. Directed graphs use arrows to enforce one-way traffic constraints.",
+        "Digital-Principles-State-Diagrams": "Digital Principles State Diagrams deals about designing visual flowcharts used to design digital circuits by showing how a machine changes its state based on user inputs.",
+        "Automata-Theory-I-NFA-DFA-construction-using-Regular-Expression": "NFA-DFA construction using Regular Expression is about building simple pattern-matching rule machines out of search expressions to see if a text string matches a strict formula.",
+        "Automata-Theory-II-DFA-to-NFA-NFA-to-DFA-Conversion": "DFA to NFA NFA to DFA Conversion is about translating guessing-based machines (NFAs) into strict, predictable, zero-guess rule grids (DFAs) that software can execute cleanly.",
+        "DAG": "Directed Acyclic Graphs are one-way step paths that never loop back on themselves, perfect for mapping out code build orders or family lineages.",
+        "Graphs-in-AI-Concepts": "Network maps used by artificial intelligence to track decision pathways, game moves, or logic relations when solving problems especially using algorithms like BFS, DFS, DLS and Hill Climbing algorithms.",
+        "Graphs-in-ML-and-DL-Concepts": "Expressing the layers in AI and ML in graphs and other forms of Graph in ML and DL like Computational Graph, Network Architecture Graph, Feed Forward Neutral Network and Graph Neural Networks (GNNs) and drawing perceptions as graph in different formats.",
+        "Bayesian-Networks": "A Bayesian Network is a probabilistic graphical model that uses a directed acyclic graph to map out variables and calculate the exact likelihood of outcomes based on cause-and-effect relationships.",
+        "Neural-Networks": "A Neural Network is a computing framework inspired by the human brain, mapping interconnected nodes across layers to pass signals, detect intricate patterns, and continuously improve its predictions through data mapping.",
+        "Graph-Colouring": "Graph Colouring is about assigning colors to dots on a map so that no two connected dots share the identical color, useful for scheduling exams without time clashes.",
+        "Local-and-Global-Maxima-Minima": "Local Maxima and Minima is about locating individual local peaks and valleys along a chart, and comparing them to discover the absolute highest and lowest points across the entire system."
+    };
+    function updateAlgoDescription() {
+        const topic = document.getElementById('graph-topic').value;
+        const textElement = document.getElementById('algo-description-text');
+        if (textElement) {
+            textElement.innerText = algoDescriptions[topic] || "Description not available.";
+        }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        saveHistory();
+        drawGraph();
+        updateAlgoDescription();
+        fetchNewQuestion();
+        updateStateButtonsVisibility();
+        resetTimerCount();
+        const userInputContainer = document.getElementById('user-input-container');
+        userInputContainer.classList.toggle('visible', appMode === "USER_ASK");
+    });
+    document.getElementById('refresh-question').onclick = () => {
+        graph = { vertices: [], edges: [] };
+        selectedVertex = null;
+        edgeFromVertex = null;
+        updateVertexList();
+        const weightInputsArea = document.getElementById('weight-inputs-area');
+        if (weightInputsArea) {
+            weightInputsArea.innerHTML = '<p style="font-size: 13px; color: #ddd;">Enable "Weight" to edit edges.</p>';
+        }
+        saveHistory();
+        resetTimerCount();
+        fetchNewQuestion();
+    };
+    let topicChangeTimeout;
+    document.getElementById('graph-topic').onchange = () => {
+        clearTimeout(topicChangeTimeout);
+        updateAlgoDescription();
+        updateStateButtonsVisibility();
+        topicChangeTimeout = setTimeout(fetchNewQuestion, 500);
+    };
+function incrementTopicCount(topicName) {
+    fetch('/update-stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: topicName, count: 1 })
+    }).catch(err => console.error("Error syncing stats with backend:", err));
+}
+function incrementTotalSolved() {
+    // Total is auto-incremented server-side inside /update-stats. No separate frontend action needed.
+}
+document.getElementById('zoom-in-btn').addEventListener('click', () => {
+    zoomBy(ZOOM_SPEED);
+});
+document.getElementById('zoom-out-btn').addEventListener('click', () => {
+    zoomBy(-ZOOM_SPEED);
+});
+canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+    zoomBy(e.deltaY < 0 ? ZOOM_SPEED : -ZOOM_SPEED, sx, sy);
+}, { passive: false });
+    </script>
+</body>
+</html>

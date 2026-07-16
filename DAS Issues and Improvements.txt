@@ -1,0 +1,43 @@
+DAS ISSUES & IMPROVEMENTS
+
++ Features under construction are commented. 
+
+1. Delete Account button deletes the total number of questions field. But, not all. Now, it is 0 Total questions solved 9 spanning trees, which is illogical.
+Check if it is resolved
+2. Certificate complete fully and add in functionality of DAS actual website
+3. All are stored in the indexed DB dynamically in profile page except skills. Others rectified.
+4. Check for the requirements of each algorithms like Floyd Warshall algorithm needs matrix to solve procedurally. Likewise, we don't know what other algorithms need what to solve
+5. Need to include no of problems solved, scoreboard similar to skillrack
+6. Ok Connect design like two vertices connection with one edge
+7. Dynamic Easy Medium Hard Radio buttons (select one at a time) to change question difficulty dynamically by AI. Tell to AI.
+8. Generate questions based on age. That is 10 years old, easy questions. 20 years old difficult question. 30 years old, intermediate questions. 40 years old again easy questions. 
+9. Calculate age using the "Birthday" detail given in the profile.html page by the user. Update with respect to birthday and NOT static AGE.
+10. Input tag dynamic name change with AUTOSAVE for vertices and edges instead of static text.
+11. New dummy buttons for Stack/Queue, Array, Linked List, Types of Sort added. Create web apps separately for each.
+12. Add Terms and Conditions page similar to EAKN
+13. Add time calculated per question in profile page and consolidate scores accordingly later.
+14. Allow nested group, isolate from group
+15. Remove only the particular vertex on isolate group, not all the grouped vertices, keep ungroup function same.
+16. Start from your project DDP, note all features that you have created like dynamic meter bar, password strength checker circular meter bar, budget management features and add all those somewhere in DAS in more suitable place
+17. Implement Dynamic, Autosave, Try Automation which mean, like alarm or something, automatically notifies when a particular time reach or function happens. Slightly different from dynamic. Dynamic -> Live time, Auomation -> Alarm
+18. Use both AI integration and (ML/DL)(AI means AI content generation, AI training, dataset feeding and all, ML is emotion detection, object detection, face detection, leaf disease prediction, whether prediction, testing and training models, drowsiness detection...). Both are slightly different. See the difference and do accordingly.
+19. Add user engagement, product usability, navigation, consistency, error prevention, feedback, visual clarity and flexibility in DAS.
+20. DO ALL THESE AND RE DEVELOP -> Problem, statement, competition, user group, user segmentation, user interview, info architecture, flow diagram, testing
+21. Determine User flow for DAS page to page. Is it easy to navigate? Easy to find features? Easy to use features?
+22. Use pytessaract python library somewhere
+
+[imp] See Web Development note chapter 4 User Experience Tips follow from there till last
+
+FAULTS IN PAGES
+
+0* is Graphs
+
+index.html => Added new dummy buttons for 1*. Stack/Queue button 2*. Array Button 3*. Linked List Button 4*. Sorting and Searching
+
+LAST WORKS
+
+1. Within Odd Sem of IV year, do 1* and 2* alone fully with instruction page, about page, report making, all pucca
+2. Next Sem, do 3* and 4* fully with instruction page, about page, report making, all pucca
+3. Mock Interview only on DSA general questions and about you questions AI powered speech + emotion panel
+
+NOTE 0* Graphs completed

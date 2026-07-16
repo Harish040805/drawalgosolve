@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | DAS : DrawalgoSolve</title>
+    <link rel="shortcut icon" href="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" type="image/x-icon">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #fff; font-family: Arial, sans-serif; color: #333; line-height: 1.6; user-select: none; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #004aad; width: 100%; padding: 15px 50px; color: white; 
+            margin-bottom: 30px; position: sticky; top: 0; z-index: 1000; }
+        .nav-links { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
+        .nav-links li a { color: #fff; text-decoration: none; font-weight: bold; white-space: nowrap; font-size: 16px; }
+        .logo { display: flex; align-items: center; font-size: 22px; font-weight: bold; white-space: nowrap; gap: 10px; }
+        .logo img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 10px; }
+        .profile-header { text-align: center; margin-bottom: 40px; }
+        .profile-header h1 { color: #1e0f8e; font-size: 36px; border-bottom: 3px solid #004aad; display: inline-block; padding-bottom: 10px; }
+        .section-title { color: #1e0f8e; border-left: 5px solid #004aad; padding-left: 15px; margin: 25px 0 15px 0; font-size: 22px; }
+        .details-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; background: #f0f4ff; padding: 25px; border-radius: 12px; 
+            border: 2px solid #004aad; align-items: end; }
+        .detail-item { display: flex; flex-direction: row; width: 100%; }
+        .detail-item input, .detail-item select { width: 100%; height: 45px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .detail-item input:focus { border-color: #1e0f8e; outline: none; box-shadow: 0 0 5px rgba(30,15,142,0.2); }
+        .birthday-item { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+        .birthday-item input, .birthday-item select { width: 100%; height: 45px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .birthday-item input:focus { border-color: #1e0f8e; outline: none; box-shadow: 0 0 5px rgba(30,15,142,0.2); }
+        .skills-container { background: #f9f9f9; padding: 25px; border-radius: 12px; border: 2px solid #004aad; }
+        .skills-input-group { display: flex; gap: 15px; margin-bottom: 20px; }
+        .skills-input-group input { flex: 1; height: 45px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .skills-input-group input:focus { border-color: #1e0f8e; outline: none; }
+        #todo-input { flex: 1; height: 45px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        #todo-input:focus { border-color: #1e0f8e; outline: none; }
+        .remove-skill-btn { background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 16px; font-weight: bold; line-height: 1; }
+        .remove-skill-btn:hover { color: red; }
+        .stats-grid { display: grid; grid-template-columns: repeat(9, 1fr); gap: 30px 15px; padding: 30px; background: #eeeeee; border: 2px solid #1e0f8e;
+            border-radius: 12px; text-align: center; }
+        .stat-card { display: flex; flex-direction: column; align-items: center; }
+        .stat-upper { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
+        .stat-icon { width: 50px; height: 50px; background-color: #004aad; color: white; border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; font-size: 24px; }
+        .stat-value { font-size: 42px; font-weight: 500; color: #333; }
+        .stat-label { font-size: 12px; font-weight: bold; color: #333; text-transform: uppercase; max-width: 120px; line-height: 1.2; }
+        .total-card .stat-icon { background-color: #004aad; }
+        .stat-card:not(.total-card) .stat-icon { background-color: #fff; border: 3px solid #004aad; }
+        .total-highlight { background-color: #004aad; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+        .cert-placeholder { text-align: center; padding: 40px; border: 2px dashed #004aad; border-radius: 12px; color: #666; font-style: italic; 
+            background: #f0f4ff; }
+        .save-btn { width: 100%; padding: 12px; background-color: #2915c0; color: white; border: 3px solid #1e0f8e; border-radius: 8px; cursor: pointer; 
+            font-weight: bold; font-size: 16px; }
+        .save-btn:hover { border-color: #160a6f; }
+        #delete-account-btn { background-color: #ff4d4d; color: white; padding: 10px 20px; border: 2px solid red; border-radius: 5px; cursor: pointer; 
+            margin: 30px auto; display: inline; }
+        #delete-account-btn:hover { background-color: #e4453c; }
+        .about-iframe-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.950); display: none; 
+            z-index: 2000; }
+        .about-close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #fff; background-color: #ff0000; border-radius: 50%; 
+            width: 40px; height: 40px; text-align: center; line-height: 40px; border: 2px solid #fff; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+  <span class="logo"><img src="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true">&nbsp; DAS: DrawalgoSolve</span>
+<ul class="nav-links">
+  <li><a href="/">🏠 Home</a></li>
+  <li id="about" style="cursor: pointer;"><a>📑 About</a></li>
+  <li><a href="/signin">✍️ Sign in</a></li>
+  <li><a href="/signup">✍️ Sign up</a></li> 
+  <li><a href="/profile">👤 Profile</a></li>
+  <li><a href="/">↪️ Log out</a></li> 
+</ul>
+</nav>
+    <div class="about-iframe-overlay" id="about-iframe-overlay">
+        <span class="about-close-btn" id="about-close-btn">&times;</span>
+        <iframe srcdoc="
+        <html>
+        <head>
+            <style>
+                html { border: 5px solid #162cec; border-radius: 20px; margin: 15px; scrollbar-width: none; -ms-overflow-style: none; }
+                html::-webkit-scrollbar { display: none; }
+                body{ font-family:Arial; padding:20px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; }
+                body::-webkit-scrollbar { display: none; }
+                .scrollable-hidden-bar::-webkit-scrollbar { display: none; }
+                img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+                b { color: #162cec; }
+                .imp { color:#ff0000; text-align: center; display: block; }
+                .sm { color:#000; }
+                h3 { color:#162cec; text-align: center; }
+            </style>
+        </head>
+            <body>
+                <img src='https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true'>
+                <h3>DAS: DrawalgoSolve - 🤖 AI Powered Graphs & Algorithms Simulation & Practice Platform with Visualization & Problem Solving 🔵</h3>
+                <hr>
+                    <p>⭐ Visualize and interact with graph structures. Create vertices, connect them with edges, and assign weights to build your logic.</p>
+                    <p><b>❓ How to use this site:</b></p>
+                    <p>
+                        ✳️<b>Navbar:</b> The Navbar contains the redirection buttons to navigate to the 🏠 Home, 📑 About, ✍️ Sign in, ✍️ Sign up and 👤 Profile pages. It also contains a ↪️ Log out button on clicking which the users can log out the web app.<br>
+                        ✳️<b>Modes in the Site:</b> Toggle between the environments using the mode selection panel. In 🏆 Challenge Mode, AI generates a question on the specific topic which you need to solve using the graph toolkit (Vertex, Edge, Weight, etc.) and validation areas. In ☑️ Solve Mode, you can input your own custom graph query in the input field on the middle top of the screen and generate solution using 🪄 Generate Graph button that the AI will automatically draw the corresponding graph layout solution on the canvas. But, frequent toggling between these modes is restricted. Also, switching from ☑️ Solve Mode back to 🏆 Challenge Mode automatically resets and generates a completely new question at once. This is to prevent copying the AI's generated solution to solve the current challenge.<br>
+                        ✳️<b>Select Topic:</b> Click the drop-down menu to select the specific topic or problem type you want to work on to solve the problem. The container below the Select Topic dropdown displays a short information about what the particular topic or algorithm is about for the users to understand how to solve the problem.<br>
+                        ✳️<b>Live Date and Time:</b> Present on the top right corner of the page shows the current time in hh:mm:ss AM/PM format and day and date in Day, Month XX, 20XX format.<br>
+                        ✳️<b>Question❓:</b> Here the AI generates the question for the user to solve on.<br>
+                        ✳️<b>🔵 Vertex and ➖ Edge:</b> Click the '🔵 Vertex' button to create a new vertex. When prompted, enter a label to name the vertex in the prompt and click OK. To use edges, first create minimum two vertices. Then, click '➖ Edge' button once to enable mode, click two vertices to connect them, then click 'Edge' again to disable.<br>
+                        ✳️<b>⚖️ Weight:</b> For weighted graph analysis, complete the diagram before clicking Weight button. Then, click '⚖️ Weight' and enter values in the input fields provided. Weight mode supports the following inputs.<br>
+                        <br>
+                        &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; ...-1,0,1..., 0.5, a,b,c..., 'inf', 0/0,0/1,1/0,1/1,X/0... w1,w2,w3... &lt;,&gt;,&lt;=,&gt;=,==,!=, ε
+                        <br><br>
+                        ✳️<b>↔️ Digraph:</b> For Digraphs (Directed Graphs), ensure there is atleast two vertices connected with atleast one edge in the graph. Click the '↔️ Digraph' button anytime to make the entire graph directed. Edge mode is independent of this function. If there is atleast one edge formed, you can click this button to make your graph a digraph anytime. To determine the proper direction, first click on the source vertex and then the destination vertex. Use Undo and Redo buttons to determine the source and the destination vertices properly.
+                        <br>
+                        ✳️<b>♾️ Self-Loop:</b> To add a self loop, first click once on the vertex that needs to have the self loop. Then click on the '♾️ Self-Loop' button to create self loop for that particular vertex.<br>
+                        ✳️<b>➡️ Initial State, ⭕ Final State:</b> Applicable and can be enabled only for the Automata Theory I, II and DAG Problems and are similar to 🔵 Vertex button.<br>
+                        ✳️<b>🕸️ Group:</b> Useful to group two or more vertices/keys into a single disk block structure, typically used to represent index nodes in advanced data structures like B Trees or B+ Trees. When designing these structures, the 🕸️ Group feature can represent grouped keys inside a unified block, interleaving them cleanly with multiple child pointers according to the logic of the target problem context.<br>
+                        ✳️<b>🔓 Ungroup:</b> Removes the partcular group formed between two or more vertices/keys.<br>
+                        ✳️<b>↩️ Undo,↪️ Redo,🔄️ Reset:</b> Click '↩️ Undo' or '↪️ Redo' button once to undo or redo the graph to one previous state. Click '🔄️ Reset' button to clear the entire graph.<br>
+                        ✳️<b>Selecting a Particular Vertex:</b> Just left click on a particular vertex once that needs to be selected and implement functions.<br>
+                        ✳️<b>🗑️ Delete:</b> Select a vertex, then click the '🗑️ Delete' button.<br>
+                        ✳️<b>Zoom ➕ and ➖:</b> Click on the 'Zoom ➕' button for gradual zoom in and 'Zoom ➖' button for gradual zoom out.<br>
+                        ✳️<b>📟 Open Matrix Solver:</b> Click the '📟 Open Matrix Solver' button to open the overlay. Input the required dimensions in 'Rows' and 'Cols' and click 'Add New Matrix' to generate the grid. Fill the cells with numbers, letters, or symbols as needed. For labeled grids (e.g., adjacency matrices), increase the dimensions by 1 (e.g., create a 6 x 6 matrix for a 5 x 5 grid) to use the first row and column for headers; otherwise, create the exact size needed. This flexible tool can be adapted to suit any specific problem context.<br>
+                        ✳️<b>🗺️ Vertex Explorer:</b> Here the names of all the vertices created on the graph by the users are displayed. It is where the names of the vertices can be changed dynamically.<br>
+                        ✳️<b>⚖️ Edge Weights:</b> Here the weights of the edges are displayed. To enable edge weights, click on 'Weights' button. Here, the weights of the edges can be changed dynamically.<br>
+                        ✳️<b>🔨 Resizable User Justification & Doubt Clarification Area 📜:</b> This mandatory, autosaving textarea is available only in 🏆 Challenge Mode and evaluated by AI. It is used to justify the user drawn graph. It serves three roles, 1. To give Justification for the user drawn graph. 2. To ask doubts to AI acting like an input field to chat with AI. 3. To use as a text based graph construction for problems that need some specific features that are not in this site. That is, if a problem needs a stack interface to solve it before expressing it in a graph, this web app does not support stack. So, that can be compromised my using the User Justification Area.<br>
+                        ✳️<b>☑️ SOLVE Button:</b> To be clicked in the last after the graph is drawn and the justification is given. This triggers the AI to evaluate the graph drawn by the user and tell if it is correct or not. It is present in both the modes. But, advised to use only in 🏆 Challenge Mode.<br>
+                        ✳️<b>AI Solution:</b> All the solution given by AI will appear in the container having the text Solution output will appear here... It serves as a solution container for the 🔨 Resizable User Justification & Doubt Clarification Area 📜. It is present in both 🏆 Challenge Mode and ☑️ Solve Mode. In 🏆 Challenge Mode, it is where the AI displays its comments on the user drawn graph, that is it says whether the user's graph is drawn CORRECTLY or INCORRECTLY or PARTIALLY CORRECTLY. In☑️ Solve Mode, it the container where the AI gives its justification for the graph it draw. It serves three roles, 1. The AI gives its justification and solution for the graph drawn by it here. 2. The AI tells the users whether the graph drawn by them is correct or not here. 3. The AI generated solution for the graph drawn is displayed here.<br>
+                        ✳️<b>🗽 NEW CHALLENGE/🗽 NEXT CHALLENGE Button:</b> Makes the AI generate a new question. For user given incorrect solution, unable to solve by the user, the user can either know the solution toggling to the ☑️ Solve Mode or just skip the question clicking on this button. If the user given solution is incorrect, it stays on the same page until the user gives a correct solution otherwise click on the 🗽 NEW CHALLENGE button to skip it. On skipping a particular question, the profile page will not get updated in the total number of problems solved by the users, but moves to the next question. If the user given solution is correct, then the 🗽 NEW CHALLENGE button automatically turns into 🗽 NEXT CHALLENGE button, that the users can move to the next challange and the profile page gets updated by 1. The same button serves both the functionalities in a slightly different way. The difference lies in profile page updation.<br>
+                        ✳️<b>↔️ Colour Picker [_]:</b> For specific problems like graph colouring that needs two or more colours to be used, the user is advised to use the Colour Picker to create vertices of different colours based on the problem nature. First the user needs to select a particular vertex whose colour needs to be changed. Then click on the colour pane in the bottom right corner usually in a blue colour for an unused page. Drag to the desired colour you need. Here the changes are not shown immediately. Once you choose the desired colour, click outside the colour panel anywhere (recommended to click on the canvas somewhere) to see the changes in the vertex colour. A vertex that is been selected is diaplyed always in blue colour. Do not confuse with it and the colour choosen.<br> 
+                    </p>
+                <br>
+                <b class='imp'>‼️🚨 *** IMPORTANT *** ⚠️‼️</b>
+                <hr>
+                    <p>👉 <b class='sm'>IN SOLVE MODE</b>, Expand the vertices of the graph to certain distance to get a clear view of the graph generated by the AI</p>
+                    <br><br>
+            </body>
+        </html>" 
+            frameborder="0" width="100%" height="100%"></iframe>
+    </div>
+<div class="container">
+    <div class="profile-header">
+        <h1 id="display-name">👤 User Profile</h1>
+    </div>
+    <h2 class="section-title">👤 User Details</h2>
+    <div class="details-grid">
+        <div class="detail-item"><input type="text" id="username" name="username" value="{{ profile.username }}" placeholder="🏷️ First Name"></div>
+        <div class="detail-item"><input type="text" id="middlename" name="middlename" value="{{ profile.middlename }}" placeholder="🏷️ Middle Name (Optional)"></div>
+        <div class="detail-item"><input type="text" id="lastname" name="lastname" value="{{ profile.lastname }}" placeholder="🏷️ Last Name"></div>
+        <div class="detail-item"><input type="text" id="email" name="email" value="{{ profile.email }}" placeholder="✉️ Email Address"></div>
+        <div class="detail-item"><input type="text" id="dept" name="dept" value="{{ profile.dept }}" placeholder="🎓 Class / Department (Optional)"></div>
+        <div class="detail-item"><input type="tel" id="mobile-no" name="mobile-no" value="{{ profile.mobile_no }}" placeholder="📞 Mobile No" class="profile-input"></div>
+        <div class="birthday-item">🎂 Birthday <input type="date" id="birthday" style="flex: 1;" name="birthday" value="{{ profile.birthday }}"></div>
+        <div class="detail-item"><input type="url" id="github-url" name="github-url" value="{{ profile.github_url }}" placeholder="🐈‍⬛ Github URL (Optional)"></div>
+        <div class="detail-item"><input type="text" id="coll-name" name="coll-name" value="{{ profile.coll_name }}" placeholder="🏫 College Name (Optional)"></div>
+        <div class="detail-item"><input type="text" id="location" name="location" value="{{ profile.location }}" placeholder="📍 Location (Optional)"></div>
+        <div class="detail-item">
+            <select id="gender" name="gender">
+                <option value="" {% if profile.gender == '' %}selected{% endif %}>⚧️ -- Select Gender --</option>
+                <option value="male" {% if profile.gender == 'male' %}selected{% endif %}>♂️ Male</option>
+                <option value="female" {% if profile.gender == 'female' %}selected{% endif %}>♀️ Female</option>
+                <option value="other" {% if profile.gender == 'other' %}selected{% endif %}>⚧️ Other</option>
+            </select>
+        </div>
+        <div class="detail-item"><input type="text" id="linkedin" name="linkedin" value="{{ profile.linkedin if profile.linkedin is defined else '' }}" placeholder="📱 LinkedIn (Optional)"></div>        
+    </div>
+    <h2 class="section-title">🧠 Skills</h2>
+
+    <div class="skills-container">
+        <div class="skills-input-group" style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <input type="text" id="todo-input" placeholder="💡 Enter a skill (e.g., Python, React)">
+            <button id="add-btn" style="padding: 0 25px; background-color: #004aad; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">➕ Add Skill</button>
+        </div>
+        <div class="skills-grid" id="todo-list" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
+    </div>
+
+<h2 class="section-title">🔢 Problem Statistics</h2>
+    <div class="stats-grid">
+        <div class="stat-card total-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🔟</div>
+                <div class="stat-value" id="stat-total">{{ profile.stats.get('total', 0) }}</div>
+            </div>
+            <div class="stat-label">Total Count of Problems Solved</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🌳</div>
+                <div class="stat-value" id="stat-Spanning-Tree">{{ profile.stats.get('Spanning-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">Spanning Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🌴</div>
+                    <div class="stat-value" id="stat-Binary-Tree">{{ profile.stats.get('Binary-Tree', 0) }}</div>            
+                </div>
+            <div class="stat-label">Binary Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🌴</div>
+                <div class="stat-value" id="stat-Binary-Search-Tree">{{ profile.stats.get('Binary-Search-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">Binary Search Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🏝️</div>
+                <div class="stat-value" id="stat-B-Tree">{{ profile.stats.get('B-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">B Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🏝️</div>
+                <div class="stat-value" id="stat-B-Plus-Tree">{{ profile.stats.get('B-Plus-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">B Plus Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🌲</div>
+                <div class="stat-value" id="stat-AVL-Tree">{{ profile.stats.get('AVL-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">AVL Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🍁</div>
+                <div class="stat-value" id="stat-Red-Black-Tree">{{ profile.stats.get('Red-Black-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">Red Black Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🎋</div>
+                <div class="stat-value" id="stat-Segment-Tree">{{ profile.stats.get('Segment-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">Segment Trees</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🪵</div>
+                <div class="stat-value" id="stat-Heap-Tree">{{ profile.stats.get('Heap-Tree', 0) }}</div>
+            </div>
+            <div class="stat-label">Heap Tree</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🩷</div>
+                <div class="stat-value" id="stat-Prim's-Algorithm">{{ profile.stats.get("Prim's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Prim's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">💜</div>
+                <div class="stat-value" id="stat-Kruskal's-Algorithm">{{ profile.stats.get("Kruskal's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Kruskal's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🤎</div>
+                <div class="stat-value" id="stat-Dijkstra's-Algorithm">{{ profile.stats.get("Dijkstra's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Dijkstra's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🟣</div>
+                <div class="stat-value" id="stat-Floyd-Warshall-Algorithm">{{ profile.stats.get('Floyd-Warshall-Algorithm', 0) }}</div>
+            </div>
+            <div class="stat-label">Floyd-Warshall Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🔔</div>
+                <div class="stat-value" id="stat-Bellman-Ford-Algorithm">{{ profile.stats.get('Bellman-Ford-Algorithm', 0) }}</div>
+            </div>
+            <div class="stat-label">Bellman-Ford Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🤎</div>
+                <div class="stat-value" id="stat-Kahn's-Algorithm">{{ profile.stats.get("Kahn's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Kahn's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🔵</div>
+                <div class="stat-value" id="stat-Johnson's-Algorithm">{{ profile.stats.get("Johnson's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Johnson's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🟤</div>
+                <div class="stat-value" id="stat-Boruvka's-Algorithm">{{ profile.stats.get("Boruvka's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Boruvka's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🏎️</div>
+                <div class="stat-value" id="stat-Ford-Fulkerson's-Algorithm">{{ profile.stats.get("Ford-Fulkerson's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Ford-Fulkerson's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🩵</div>
+                <div class="stat-value" id="stat-Dinic's-Algorithm">{{ profile.stats.get("Dinic's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Dinic's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">💜</div>
+                <div class="stat-value" id="stat-Karger's-Algorithm">{{ profile.stats.get("Karger's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Karger's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🩵</div>
+                <div class="stat-value" id="stat-Peterson's-Algorithm">{{ profile.stats.get("Peterson's-Algorithm", 0) }}</div>
+            </div>
+            <div class="stat-label">Peterson's Algorithm</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">👨🏻‍💼</div>
+                <div class="stat-value" id="stat-TSP">{{ profile.stats.get('TSP', 0) }}</div>
+            </div>
+            <div class="stat-label">TSP (Travelling Salesman Problem)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="stat-Graph-Vertex-Edges-different-types">{{ profile.stats.get('Graph-Vertex-Edges-different-types', 0) }}</div>
+            </div>
+            <div class="stat-label">Graph: Vertex/Edges Different Types</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🔁</div>
+                <div class="stat-value" id="stat-Euler-Path-and-Circuit">{{ profile.stats.get('Euler-Path-and-Circuit', 0) }}</div>
+            </div>
+            <div class="stat-label">Euler Path & Circuit</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🔁</div>
+                <div class="stat-value" id="stat-Hamiltonian-Path-and-Circuit">{{ profile.stats.get('Hamiltonian-Path-and-Circuit', 0) }}</div>
+            </div>
+            <div class="stat-label">Hamiltonian Path & Circuit</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">❄️</div>
+                <div class="stat-value" id="stat-Lattice-Partially-Ordered-Set">{{ profile.stats.get('Lattice-Partially-Ordered-Set', 0) }}</div>
+            </div>
+            <div class="stat-label">Lattice (Partially Ordered Set)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🚲</div>
+                <div class="stat-value" id="stat-Cycle-Detection">{{ profile.stats.get('Cycle-Detection', 0) }}</div>
+            </div>
+            <div class="stat-label">Cycle Detection</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="stat-Directed-and-Undirected-Graphs">{{ profile.stats.get('Directed-and-Undirected-Graphs', 0) }}</div>
+            </div>
+            <div class="stat-label">Directed & Undirected Graphs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">📟</div>
+                <div class="stat-value" id="stat-Digital-Principles-State-Diagrams">{{ profile.stats.get('Digital-Principles-State-Diagrams', 0) }}</div>
+            </div>
+            <div class="stat-label">Digital Principles State Diagrams</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">⚙️</div>
+                <div class="stat-value" id="stat-Automata-Theory-I-NFA-DFA-construction-using-Regular-Expression">{{ profile.stats.get('Automata-Theory-I-NFA-DFA-construction-using-Regular-Expression', 0) }}</div>
+            </div>
+            <div class="stat-label">Automata Theory I (NFA/DFA Construction using Regular Expression)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🦾</div>
+                <div class="stat-value" id="stat-Automata-Theory-II-DFA-to-NFA-NFA-to-DFA-Conversion">{{ profile.stats.get('Automata-Theory-II-DFA-to-NFA-NFA-to-DFA-Conversion', 0) }}</div>
+            </div>
+            <div class="stat-label">Automata Theory II (DFA to NFA/NFA to DFA Conversion)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🚲</div>
+                <div class="stat-value" id="stat-DAG">{{ profile.stats.get('DAG', 0) }}</div>
+            </div>
+            <div class="stat-label">DAG (Directed Acyclic Graph)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🤖</div>
+                <div class="stat-value" id="stat-Graphs-in-AI-Concepts">{{ profile.stats.get('Graphs-in-AI-Concepts', 0) }}</div>
+            </div>
+            <div class="stat-label">Graphs in AI Concepts</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🤖</div>
+                <div class="stat-value" id="stat-Graphs-in-ML-and-DL-Concepts">{{ profile.stats.get('Graphs-in-ML-and-DL-Concepts', 0) }}</div>
+            </div>
+            <div class="stat-label">Graphs in ML and DL Concepts</div>
+        </div> 
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🛜</div>
+                <div class="stat-value" id="stat-Bayesian-Networks">{{ profile.stats.get('Bayesian-Networks', 0) }}</div>
+            </div>
+            <div class="stat-label">Bayesian Networks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🛜</div>
+                <div class="stat-value" id="stat-Neural-Networks">{{ profile.stats.get('Neural-Networks', 0) }}</div>
+            </div>
+            <div class="stat-label">Neural Networks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🎨</div>
+                <div class="stat-value" id="stat-Graph-Colouring">{{ profile.stats.get('Graph-Colouring', 0) }}</div>
+            </div>
+            <div class="stat-label">Graph Colouring</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-upper">
+                <div class="stat-icon">🎢</div>
+                <div class="stat-value" id="stat-Local-and-Global-Maxima-Minima">{{ profile.stats.get('Local-and-Global-Maxima-Minima', 0) }}</div>
+            </div>
+            <div class="stat-label">Local and Global Maxima Minima</div>
+        </div>
+    </div>
+
+<!-- 
+
+            THESE ARE IMPORTANT COMMENTS. NO NEED TO DELETE. COMMENT TEMPORARILY. AFTER YOU DEVELOP SITES FOR THESE, LINK THEM
+
+
+    <h2 class="section-title">🏅 Certificates Earned 🏆</h2>
+    <div class="cert-placeholder">
+        <p>No Certificates Earned Yet</p>
+    </div> 
+    
+
+-->
+
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 30px; padding: 10px 0; border-top: 1px solid #ccc;">
+    <p style="margin: 0;">📞 Contact: 9487629470 / 9342577452</p>
+    <p style="margin: 0;">✉️ Email ID: rb.harish05@gmail.com</p>
+    <button id="delete-account-btn" style="margin: 0;">🗑️ Delete Account</button>
+</div>
+</div>
+<script>
+const dbName = "DrawalgoSolveDB";
+let dbInstance = null;
+
+async function getDB() {
+    if (dbInstance) return dbInstance;
+    dbInstance = await initDB();
+    return dbInstance;
+}
+
+function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName, 2);
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains("stats")) {
+                db.createObjectStore("stats", { keyPath: "topic" });
+            }
+            if (!db.objectStoreNames.contains("userProfile")) {
+                db.createObjectStore("userProfile", { keyPath: "id" });
+            }
+            if (!db.objectStoreNames.contains("userSkills")) {
+                db.createObjectStore("userSkills", { keyPath: "skillName" });
+            }
+        };
+        request.onsuccess = (event) => resolve(event.target.result);
+        request.onerror = (event) => reject(event.target.error);
+    });
+}
+
+let autoSaveTimeout;
+function triggerAutoSave() {
+    const formData = new FormData();
+    document.querySelectorAll(".details-grid input, .details-grid select").forEach(input => {
+        if (input.name) formData.append(input.name, input.value);
+    });
+    fetch("/save-profile", { method: "POST", body: formData })
+        .then(res => res.json())
+        .catch(err => console.error("Auto-save sync error:", err));
+}
+function setupAutoSave() {
+    document.querySelectorAll(".details-grid input, .details-grid select").forEach(el => {
+        const handleChange = () => {
+            if (el.id === 'username') updateCenterName();
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(triggerAutoSave, 500);
+        };
+        el.addEventListener("input", handleChange);
+        el.addEventListener("change", handleChange);
+    });
+}
+
+async function syncBackendStats() {
+    try {
+        const response = await fetch('/get-stats');
+        const data = await response.json();
+        const stats = data.stats || {};
+        let computedTotal = 0;
+        for (const [topic, count] of Object.entries(stats)) {
+            if (topic === 'total') continue; // handled separately below
+            computedTotal += parseInt(count) || 0;
+            const element = document.getElementById('stat-' + topic.replace(/\s+/g, '-'));
+            if (element) element.innerText = count;
+        }
+        const totalElement = document.getElementById('stat-total');
+        if (totalElement) {
+            totalElement.innerText = (stats['total'] !== undefined) ? stats['total'] : computedTotal;
+        }
+    } catch (err) {
+        console.error("Failed to sync stats from backend:", err);
+    }
+}
+window.addEventListener('storage', syncBackendStats);
+window.addEventListener('focus', syncBackendStats);
+window.addEventListener('pageshow', syncBackendStats);
+
+async function loadSkills() {
+    try {
+        const db = await getDB();
+        const transaction = db.transaction(["userSkills"], "readonly");
+        const store = transaction.objectStore("userSkills");
+        const request = store.getAll();
+        request.onsuccess = () => {
+            const skills = request.result || [];
+            const grid = document.getElementById("todo-list");
+            grid.innerHTML = "";
+            skills.forEach(skill => {
+                renderSkillDOM(skill.skillName);
+            });
+        };
+    } catch (err) {
+        console.error("Error loading skills:", err);
+    }
+}
+
+function renderSkillDOM(skillName) {
+    const grid = document.getElementById("todo-list");
+    if (!grid) return;
+
+    const existingSkills = Array.from(grid.querySelectorAll('.skill-text')).map(el => el.innerText.trim());
+    if (existingSkills.includes(skillName.trim())) return;
+
+    const item = document.createElement("div");
+    item.className = "skill-item";
+    item.style.cssText = 'background: #e0ebff; border: 1px solid #004aad; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #1e0f8e; min-width: 0;';
+
+    const textSpan = document.createElement("span");
+    textSpan.className = "skill-text";
+    textSpan.style.cssText = 'overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 5px;';
+    textSpan.innerText = skillName;
+    
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-skill-btn";
+    removeBtn.innerHTML = "&times;";
+    
+    removeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        removeSkill(skillName, item);
+    });
+    
+    item.appendChild(textSpan);
+    item.appendChild(removeBtn);
+    grid.appendChild(item);
+}
+
+async function addSkill() {
+    const input = document.getElementById("todo-input");
+    const skillName = input.value.trim();
+    if (!skillName) return;
+
+    try {
+        const db = await getDB();        
+        const tx = db.transaction(["userSkills"], "readwrite");
+        const store = tx.objectStore("userSkills");
+        const checkRequest = store.get(skillName);
+
+        checkRequest.onsuccess = () => {
+            if (checkRequest.result) {
+                alert("Skill already exists!");
+                input.value = "";
+                return;
+            }
+            store.put({ skillName });
+        };
+
+        tx.oncomplete = () => {
+            renderSkillDOM(skillName);
+            input.value = "";
+            fetch("/add-skill", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ skill: skillName })
+            }).catch(err => console.error("Error syncing skill to server:", err));
+        };
+
+        tx.onerror = (err) => {
+            console.error("Transaction failed:", err);
+        };
+    } catch (err) {
+        console.error("Error adding skill:", err);
+    }
+}
+
+function removeSkill(skillName, element) {
+    getDB().then(db => {
+        const tx = db.transaction(["userSkills"], "readwrite");
+        tx.objectStore("userSkills").delete(skillName);
+        tx.oncomplete = () => {
+            element.remove();
+            fetch("/delete-skill", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ skill: skillName })
+            }).catch(err => console.error("Error syncing skill removal to server:", err));
+        };
+    });
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await initDB();
+        await syncBackendStats();
+        await loadSkills();
+        updateCenterName();
+        setupAutoSave();
+        document.getElementById("add-btn").onclick = addSkill;
+        document.getElementById("todo-input").onkeypress = (e) => {
+            if (e.key === "Enter") addSkill();
+        };
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+function updateCenterName() {
+    const name = document.getElementById('username').value;
+    const displayElement = document.getElementById('display-name');
+    if (displayElement) {
+        displayElement.innerText = name ? `👤 ${name}'s Profile` : "👤 User Profile";
+    }
+}
+
+document.getElementById('delete-account-btn').onclick = async function() {
+    const confirmDelete = confirm("Are you sure you want to delete your account?");
+    if (confirmDelete) {
+        const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        alert("Security Verification: Your OTP to delete account is: " + generatedOTP);
+        const userOTP = prompt("Please enter the 6-digit OTP to confirm deletion:");
+        if (userOTP === generatedOTP) {
+            try {
+                const serverRes = await fetch("/delete-account", { method: "POST" });
+                if (!serverRes.ok) {
+                    alert("Error: Could not delete account from server.");
+                    return;
+                }
+                const db = await getDB();
+                const transaction = db.transaction(["stats", "userProfile", "userSkills"], "readwrite");
+                transaction.objectStore("stats").clear();
+                transaction.objectStore("userProfile").clear();
+                transaction.objectStore("userSkills").clear();
+                transaction.oncomplete = () => {
+                    alert("Account verified. All data has been reset to zero.");
+                    location.reload(); 
+                };
+                transaction.onerror = (event) => {
+                    console.error("Error clearing data:", event.target.error);
+                    alert("Error: Could not reset data.");
+                };
+            } catch (error) {
+                console.error("IndexedDB error during deletion:", error);
+                alert("Error accessing database for deletion.");
+            }
+        }         
+        else {
+            alert("Invalid OTP. Account deletion cancelled.");
+        }
+    }
+}
+
+const aboutOverlay = document.getElementById('about-iframe-overlay');
+if (document.getElementById('about')) {
+    document.getElementById('about').onclick = () => aboutOverlay.style.display = 'block';
+}
+if (document.getElementById('about-close-btn')) {
+    document.getElementById('about-close-btn').onclick = () => aboutOverlay.style.display = 'none';
+}
+</script>
+</body>
+</html>

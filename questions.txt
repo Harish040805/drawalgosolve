@@ -1,0 +1,25 @@
+### B-Tree
+Let 4, 5, 23, 21, 8, 2, 19, 10 be the keys to be inserted into a B-Tree of order 3. Construct the resulting tree.
+Insert 10, 20, 5, 6, 12, 30, 7, 17 into an empty B-Tree of order 4 and show the final structure.
+
+### Automata Theory - I NFA DFA construction using Regular Expression
+Construct a DFA that accepts all strings over {0,1} containing 'ab' as a substring.
+Construct a DFA for the language over {0,1}* such that it contains '0000' as a substring.
+Construct a DFA for the string {baaabbabba}.
+Construct a NFA using Thompson's construction algorithm for the regular expression (a|b)*abb(a|b)*
+Shakespeare wants to construct a DFA for the expression (a|b)*abab. Help him constructing the machine.
+Help Robert Frost to construct a DFA for the regular expression a*b+a.
+
+### Trees
+Help engineer Maran draw a graph with 6 vertices and 12 edges representing city intersections for his projects.
+Help Kendra Lust draw a spanning tree for a graph with 2 vertices and 8 edges for connecting the bond between 2 friends.
+Draw a spanning tree for a graph with 6 vertices and 5 edges representing the structure of a flower.
+Draw a spanning tree for a graph with 8 vertices and 16 edges representing a web of a spider.
+Help the chemist to draw the structure of CH4 to research about it.
+Help the alchemist to draw the structure of C2H6 to complete his research successfully.
+
+### Graph Vertex Edges Different Types
+Draw a graph with 5 vertices and 10 edges
+Draw a graph with exactly two vertices that has odd degree
+Draw a graph with even degree of vertices
+Draw an isomorphic graph

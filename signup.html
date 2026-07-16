@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | DAS: DrawalgoSolve</title>
+    <link rel="shortcut icon" href="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" type="image/x-icon">
+    <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; background-color: #fff; font-family: Arial, sans-serif; user-select: none; }
+    .login-box { background: #fff; padding: 30px; border-radius: 15px; border: none; width: 450px; margin-right: 20px; }
+    .login-boxii { background: white; padding: 30px; border-radius: 15px; border: 2px solid #1e0f8e; width: 550px; }
+    .input-group { display: flex; gap: 10px; }
+    .outerbox { display: flex; background: #fff; padding: 30px; border-radius: 15px; border: 10px solid #1e0f8e; width: 1000px; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    h1 { color: #1e0f8e; text-align: center; margin-bottom: 20px; }
+    input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; }
+    .error { color: #ff0000; font-size: 12px; margin-bottom: 10px; display: none; }
+    button { width: 100%; padding: 12px; background-color: #2915c0; color: white; border: 3px solid #1e0f8e; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { border-color: #160a6f; }
+    .signinlogo { width: 300px; height: 300px; margin-bottom: 10px; display: block; margin: 0 auto; border-radius: 50%; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #004aad; width: 100%; padding: 15px 50px; color: white;
+        font-family: sans-serif; margin-bottom: 50px; }
+    .nav-links { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
+    .nav-links li a { color: white; text-decoration: none; font-weight: bold; white-space: nowrap; font-size: 16px; }
+    .logo { display: flex; align-items: center; font-size: 22px; font-weight: bold; white-space: nowrap; gap: 10px; }
+    .logo img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+    .about-iframe-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.950); display: none; 
+        z-index: 2000; }
+    .about-close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #fff; background-color: #ff0000; border-radius: 50%; 
+        width: 40px; height: 40px; text-align: center; line-height: 40px; border: 2px solid #fff; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+  <span class="logo"><img src="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true">&nbsp; DAS: DrawalgoSolve</span>
+<ul class="nav-links">
+  <li><a href="/">🏠 Home</a></li>
+  <li id="about" style="cursor: pointer;"><a>📑 About</a></li>
+  <li><a href="/signin">✍️ Sign in</a></li>
+  <li><a href="/signup">✍️ Sign up</a></li>
+  <li><a href="/profile">👤 Profile</a></li>
+  <li><a href="/">↪️ Log out</a></li>
+</ul>
+</nav>
+    <div class="about-iframe-overlay" id="about-iframe-overlay">
+        <span class="about-close-btn" id="about-close-btn">&times;</span>
+        <iframe srcdoc="
+        <html>
+        <head>
+            <style>
+                html { border: 5px solid #162cec; border-radius: 20px; margin: 15px; scrollbar-width: none; -ms-overflow-style: none; }
+                html::-webkit-scrollbar { display: none; }
+                body{ font-family:Arial; padding:20px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; }
+                body::-webkit-scrollbar { display: none; }
+                .scrollable-hidden-bar::-webkit-scrollbar { display: none; }
+                img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+                b { color: #162cec; }
+                .imp { color:#ff0000; text-align: center; display: block; }
+                .sm { color:#000; }
+                h3 { color:#162cec; text-align: center; }
+            </style>
+        </head>
+            <body>
+                <img src='https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true'>
+                <h3>DAS: DrawalgoSolve - 🤖 AI Powered Graphs & Algorithms Simulation & Practice Platform with Visualization & Problem Solving 🔵</h3>
+                <hr>
+                    <p>⭐ Visualize and interact with graph structures. Create vertices, connect them with edges, and assign weights to build your logic.</p>
+                    <p><b>❓ How to use this site:</b></p>
+                    <p>
+                        ✳️<b>Navbar:</b> The Navbar contains the redirection buttons to navigate to the 🏠 Home, 📑 About, ✍️ Sign in, ✍️ Sign up and 👤 Profile pages. It also contains a ↪️ Log out button on clicking which the users can log out the web app.<br>
+                        ✳️<b>Modes in the Site:</b> Toggle between the environments using the mode selection panel. In 🏆 Challenge Mode, AI generates a question on the specific topic which you need to solve using the graph toolkit (Vertex, Edge, Weight, etc.) and validation areas. In ☑️ Solve Mode, you can input your own custom graph query in the input field on the middle top of the screen and generate solution using 🪄 Generate Graph button that the AI will automatically draw the corresponding graph layout solution on the canvas. But, frequent toggling between these modes is restricted. Also, switching from ☑️ Solve Mode back to 🏆 Challenge Mode automatically resets and generates a completely new question at once. This is to prevent copying the AI's generated solution to solve the current challenge.<br>
+                        ✳️<b>Select Topic:</b> Click the drop-down menu to select the specific topic or problem type you want to work on to solve the problem. The container below the Select Topic dropdown displays a short information about what the particular topic or algorithm is about for the users to understand how to solve the problem.<br>
+                        ✳️<b>Live Date and Time:</b> Present on the top right corner of the page shows the current time in hh:mm:ss AM/PM format and day and date in Day, Month XX, 20XX format.<br>
+                        ✳️<b>Question❓:</b> Here the AI generates the question for the user to solve on.<br>
+                        ✳️<b>🔵 Vertex and ➖ Edge:</b> Click the '🔵 Vertex' button to create a new vertex. When prompted, enter a label to name the vertex in the prompt and click OK. To use edges, first create minimum two vertices. Then, click '➖ Edge' button once to enable mode, click two vertices to connect them, then click 'Edge' again to disable.<br>
+                        ✳️<b>⚖️ Weight:</b> For weighted graph analysis, complete the diagram before clicking Weight button. Then, click '⚖️ Weight' and enter values in the input fields provided. Weight mode supports the following inputs.<br>
+                        <br>
+                        &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; ...-1,0,1..., 0.5, a,b,c..., 'inf', 0/0,0/1,1/0,1/1,X/0... w1,w2,w3... &lt;,&gt;,&lt;=,&gt;=,==,!=, ε
+                        <br><br>
+                        ✳️<b>↔️ Digraph:</b> For Digraphs (Directed Graphs), ensure there is atleast two vertices connected with atleast one edge in the graph. Click the '↔️ Digraph' button anytime to make the entire graph directed. Edge mode is independent of this function. If there is atleast one edge formed, you can click this button to make your graph a digraph anytime. To determine the proper direction, first click on the source vertex and then the destination vertex. Use Undo and Redo buttons to determine the source and the destination vertices properly.
+                        <br>
+                        ✳️<b>♾️ Self-Loop:</b> To add a self loop, first click once on the vertex that needs to have the self loop. Then click on the '♾️ Self-Loop' button to create self loop for that particular vertex.<br>
+                        ✳️<b>➡️ Initial State, ⭕ Final State:</b> Applicable and can be enabled only for the Automata Theory I, II and DAG Problems and are similar to 🔵 Vertex button.<br>
+                        ✳️<b>🕸️ Group:</b> Useful to group two or more vertices/keys into a single disk block structure, typically used to represent index nodes in advanced data structures like B Trees or B+ Trees. When designing these structures, the 🕸️ Group feature can represent grouped keys inside a unified block, interleaving them cleanly with multiple child pointers according to the logic of the target problem context.<br>
+                        ✳️<b>🔓 Ungroup:</b> Removes the partcular group formed between two or more vertices/keys.<br>
+                        ✳️<b>↩️ Undo,↪️ Redo,🔄️ Reset:</b> Click '↩️ Undo' or '↪️ Redo' button once to undo or redo the graph to one previous state. Click '🔄️ Reset' button to clear the entire graph.<br>
+                        ✳️<b>Selecting a Particular Vertex:</b> Just left click on a particular vertex once that needs to be selected and implement functions.<br>
+                        ✳️<b>🗑️ Delete:</b> Select a vertex, then click the '🗑️ Delete' button.<br>
+                        ✳️<b>Zoom ➕ and ➖:</b> Click on the 'Zoom ➕' button for gradual zoom in and 'Zoom ➖' button for gradual zoom out.<br>
+                        ✳️<b>📟 Open Matrix Solver:</b> Click the '📟 Open Matrix Solver' button to open the overlay. Input the required dimensions in 'Rows' and 'Cols' and click 'Add New Matrix' to generate the grid. Fill the cells with numbers, letters, or symbols as needed. For labeled grids (e.g., adjacency matrices), increase the dimensions by 1 (e.g., create a 6 x 6 matrix for a 5 x 5 grid) to use the first row and column for headers; otherwise, create the exact size needed. This flexible tool can be adapted to suit any specific problem context.<br>
+                        ✳️<b>🗺️ Vertex Explorer:</b> Here the names of all the vertices created on the graph by the users are displayed. It is where the names of the vertices can be changed dynamically.<br>
+                        ✳️<b>⚖️ Edge Weights:</b> Here the weights of the edges are displayed. To enable edge weights, click on 'Weights' button. Here, the weights of the edges can be changed dynamically.<br>
+                        ✳️<b>🔨 Resizable User Justification & Doubt Clarification Area 📜:</b> This mandatory, autosaving textarea is available only in 🏆 Challenge Mode and evaluated by AI. It is used to justify the user drawn graph. It serves three roles, 1. To give Justification for the user drawn graph. 2. To ask doubts to AI acting like an input field to chat with AI. 3. To use as a text based graph construction for problems that need some specific features that are not in this site. That is, if a problem needs a stack interface to solve it before expressing it in a graph, this web app does not support stack. So, that can be compromised my using the User Justification Area.<br>
+                        ✳️<b>☑️ SOLVE Button:</b> To be clicked in the last after the graph is drawn and the justification is given. This triggers the AI to evaluate the graph drawn by the user and tell if it is correct or not. It is present in both the modes. But, advised to use only in 🏆 Challenge Mode.<br>
+                        ✳️<b>AI Solution:</b> All the solution given by AI will appear in the container having the text Solution output will appear here... It serves as a solution container for the 🔨 Resizable User Justification & Doubt Clarification Area 📜. It is present in both 🏆 Challenge Mode and ☑️ Solve Mode. In 🏆 Challenge Mode, it is where the AI displays its comments on the user drawn graph, that is it says whether the user's graph is drawn CORRECTLY or INCORRECTLY or PARTIALLY CORRECTLY. In☑️ Solve Mode, it the container where the AI gives its justification for the graph it draw. It serves three roles, 1. The AI gives its justification and solution for the graph drawn by it here. 2. The AI tells the users whether the graph drawn by them is correct or not here. 3. The AI generated solution for the graph drawn is displayed here.<br>
+                        ✳️<b>🗽 NEW CHALLENGE/🗽 NEXT CHALLENGE Button:</b> Makes the AI generate a new question. For user given incorrect solution, unable to solve by the user, the user can either know the solution toggling to the ☑️ Solve Mode or just skip the question clicking on this button. If the user given solution is incorrect, it stays on the same page until the user gives a correct solution otherwise click on the 🗽 NEW CHALLENGE button to skip it. On skipping a particular question, the profile page will not get updated in the total number of problems solved by the users, but moves to the next question. If the user given solution is correct, then the 🗽 NEW CHALLENGE button automatically turns into 🗽 NEXT CHALLENGE button, that the users can move to the next challange and the profile page gets updated by 1. The same button serves both the functionalities in a slightly different way. The difference lies in profile page updation.<br>
+                        ✳️<b>↔️ Colour Picker [_]:</b> For specific problems like graph colouring that needs two or more colours to be used, the user is advised to use the Colour Picker to create vertices of different colours based on the problem nature. First the user needs to select a particular vertex whose colour needs to be changed. Then click on the colour pane in the bottom right corner usually in a blue colour for an unused page. Drag to the desired colour you need. Here the changes are not shown immediately. Once you choose the desired colour, click outside the colour panel anywhere (recommended to click on the canvas somewhere) to see the changes in the vertex colour. A vertex that is been selected is diaplyed always in blue colour. Do not confuse with it and the colour choosen.<br> 
+                    </p>
+                <br>
+                <b class='imp'>‼️🚨 *** IMPORTANT *** ⚠️‼️</b>
+                <hr>
+                    <p>👉 <b class='sm'>IN SOLVE MODE</b>, Expand the vertices of the graph to certain distance to get a clear view of the graph generated by the AI</p>
+                    <br><br>
+            </body>
+        </html>" 
+            frameborder="0" width="100%" height="100%"></iframe>
+    </div>
+<br><br>
+    <div class="outerbox">
+    <div class="login-box">
+        <img src="https://github.com/Harish040805/drawalgosolve/blob/main/drawalgosolve.png?raw=true" class="signinlogo">
+        <br>
+    </div>
+    <div class="login-boxii">
+        <h1>Sign Up 👨🏻‍💻</h1>
+        <form id="signupForm">
+            <div class="input-group">
+            <input type="text" id="username" placeholder="🏷️ First Name" autocomplete="off" required>
+            <input type="text" id="lastname" placeholder="🏷️ Last Name" autocomplete="off" required>
+            </div>
+            <div class="input-group">
+            <input type="email" id="email" placeholder="✉️ Email Address" autocomplete="off" required>
+            <input type="tel" id="mobile" placeholder="📞 Mobile No" autocomplete="off" required>
+            </div>
+            <div class="input-group">
+            <input type="password" id="password" placeholder="🔒 Password" autocomplete="off" required>
+            <input type="password" id="confirm-password" placeholder="🔒 Confirm Password" autocomplete="off" required>
+            </div>
+            <div id="errorMsg" class="error"></div>
+            <br>
+            <button type="submit">Enter Site &nbsp; ▶️</button>
+        </form>
+    </div>
+    </div>
+    <script>
+        document.getElementById('signupForm').onsubmit = function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMsg');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const numRegex = /\d/;
+            const specialChars = pass.match(/[^A-Za-z0-9]/g) || [];
+            const uniqueSpecials = new Set(specialChars);
+            let errors = [];
+            if (!emailRegex.test(email)) errors.push("Invalid email format.");
+            if (!numRegex.test(pass)) errors.push("Password needs at least 1 number.");
+            if (uniqueSpecials.size < 2) errors.push("Password needs at least 2 different special characters.");
+
+            if (errors.length > 0) {
+                errorDiv.style.display = "block";
+                errorDiv.innerText = errors.join(" ");
+            } else {
+                alert("You have successfully Signed up!")
+		        window.location.href = "/signin";
+            }
+        };
+
+    const aboutOverlay = document.getElementById('about-iframe-overlay');
+    if (document.getElementById('about')) {
+        document.getElementById('about').onclick = () => aboutOverlay.style.display = 'block';
+    }
+    if (document.getElementById('about-close-btn')) {
+        document.getElementById('about-close-btn').onclick = () => aboutOverlay.style.display = 'none';
+    }
+    </script>
+</body>
+</html>
